@@ -1,4 +1,4 @@
-# Think Grid World : A Shell 
+# Think GridWorld : A Shell 
 ## Allison Basore, Anusha Datar, and Prava Dhulipalla
 
 # Goals
