@@ -1,5 +1,5 @@
 # Think Grid World : A Shell 
-## Allison Basore, Anusha Datar, and Pravallika Dhulipalla
+## Allison Basore, Anusha Datar, and Prava Dhulipalla
 
 # Goals
 1) What is the goal of your project; for example, what do you plan to make, and what should it do?  Identify a lower bound you are confident you can achieve and a stretch goal that is more ambitious.
