@@ -2,12 +2,37 @@
 ## Allison Basore, Anusha Datar, and Prava Dhulipalla
 
 # Goals
-1) What is the goal of your project; for example, what do you plan to make, and what should it do?  Identify a lower bound you are confident you can achieve and a stretch goal that is more ambitious.
+The goal of our project is to develop a functional UNIX shell.
+
+Our minimum viable product includes:
+- Implementation of basic commands (_ls_, _cd_, _rm_, _cp_, _mv_,_mkdir_, _man_)
+- Support for piping and redirection
+
+Stretch goals we could pursue include:
+- Implementation of more fun linux commands, like _cal_ and _sl_
+- Inclusion of exciting easter eggs associated with [GridWorld](https://apcentral.collegeboard.org/courses/ap-computer-science-a/classroom-resources/gridworld-case-study)
+- Creation of a basic text editor that works in the shell (like [Vim](https://www.vim.org/))
+
 # Learning Goals
-2) What are your learning goals; that is, what do you intend to achieve by working on this project?
+Our learning goals include learning more about operating-system level design and general C programming. More specifically, we would like to explore the intersections among different layers of abstraction associated with the Unix environment. We also want to improve skills in C programming, especially in environments that are not isolated examples.
+
 # Resources
-3) What do you need to get started?  Have you found the resources you need, do you have a plan to find them, or do you need help?
+There are a variety of online resources we hope to use materials from. We intend to consult a variety of resources instead ofjust emulating one or a few in order to learn as much as possible.
+
+[GeeksForGeeks](https://www.geeksforgeeks.org/making-linux-shell-c/)
+[write a Shell in C](https://brennan.io/2015/01/16/write-a-shell-in-c/)
+[Writing Your Own Shell](https://linuxgazette.net/111/ramankutty.html?fbclid=IwAR3mdTB2vjYqhulVOm8cznGwRQLUzhDnC0SEyCys2I88kDHnyD8nYuHTVyU)
+[Build Your Own Text Editor](https://viewsourcecode.org/snaptoken/kilo/)
+
+
 # Steps and Tasks
+1. Create a basic UNIX shell that supports the basic commands. This task will be done by all team members individually so that all team members' knowledge has the same baseline. 
+2. Meet to consolidate basic shell design and finalize product to build off of. This will be done by all team members.
+3. Explore future goals (do basic research, find resources, etc.):
+- Text Editor : Anusha
+- Piping and Redirection : Prava
+- Easter Eggs/Fun Commands : Allison
+Note that all team members are responsible for brainstorming easter eggs.
+
 4) What are your first steps?  Describe at least three concrete tasks that you can do immediately, and identify which member of the team will do them.  For each one, what is the "definition of done"; that is, what will you produce to demonstrate that the task is done?
 
-Don't include the questions themselves. use typesetting to make it look decent...
