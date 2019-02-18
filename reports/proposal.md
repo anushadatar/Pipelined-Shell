@@ -19,11 +19,12 @@ Our learning goals include learning more about operating-system level design and
 # Resources
 There are a variety of online resources we hope to use materials from. We intend to consult a variety of resources instead ofjust emulating one or a few in order to learn as much as possible.
 
-[GeeksForGeeks](https://www.geeksforgeeks.org/making-linux-shell-c/)
-[write a Shell in C](https://brennan.io/2015/01/16/write-a-shell-in-c/)
-[Writing Your Own Shell](https://linuxgazette.net/111/ramankutty.html?fbclid=IwAR3mdTB2vjYqhulVOm8cznGwRQLUzhDnC0SEyCys2I88kDHnyD8nYuHTVyU)
-[Build Your Own Text Editor](https://viewsourcecode.org/snaptoken/kilo/)
-
+- [GeeksForGeeks](https://www.geeksforgeeks.org/making-linux-shell-c/)
+- [write a Shell in C](https://brennan.io/2015/01/16/write-a-shell-in-c/)
+- [Writing Your Own Shell](https://linuxgazette.net/111/ramankutty.html?fbclid=IwAR3mdTB2vjYqhulVOm8cznGwRQLUzhDnC0SEyCys2I88kDHnyD8nYuHTVyU)
+- [Build Your Own Text Editor](https://viewsourcecode.org/snaptoken/kilo/)
+- [Redirection and Pipes in C](http://www.sarathlakshman.com/2012/09/24/implementation-overview-of-redirection-and-pipe-operators-in-shell)
+- [Unix Pipes](http://web.cse.ohio-state.edu/~mamrak.1/CIS762/pipes_lab_notes.html)
 
 # Steps and Tasks
 1. Create a basic UNIX shell that supports the basic commands. This task will be done by all team members individually so that all team members' knowledge has the same baseline. Completed shells should be functional and pushed to [critters/](https://github.com/anushadatar/SoftSysThinkGridWorld/tree/master/critters) directory in this repository.
