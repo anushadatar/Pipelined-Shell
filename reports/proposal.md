@@ -5,7 +5,7 @@
 The goal of our project is to develop a functional UNIX shell.
 
 Our minimum viable product includes:
-- Implementation of basic commands (_ls_, _cd_, _rm_, _cp_, _mv_,_mkdir_, _man_)
+- Implementation of basic commands (_ls_, _cd_, _rm_, _cp_, _mv_, _mkdir_, _man_)
 - Support for piping and redirection
 
 Stretch goals we could pursue include:
