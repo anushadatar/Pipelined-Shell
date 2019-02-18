@@ -26,8 +26,8 @@ There are a variety of online resources we hope to use materials from. We intend
 
 
 # Steps and Tasks
-1. Create a basic UNIX shell that supports the basic commands. This task will be done by all team members individually so that all team members' knowledge has the same baseline. 
-2. Meet to consolidate basic shell design and finalize product to build off of. This will be done by all team members.
+1. Create a basic UNIX shell that supports the basic commands. This task will be done by all team members individually so that all team members' knowledge has the same baseline. Completed shells should be functional and pushed to [critters/](https://github.com/anushadatar/SoftSysThinkGridWorld/tree/master/critters) directory in this repository.
+2. Meet to consolidate basic shell design and finalize product to build off of. This will be done by all team members and should result in a consolidated file.
 3. Explore future goals (do basic research, find resources, etc.):
 - Text Editor : Anusha
 - Piping and Redirection : Prava
