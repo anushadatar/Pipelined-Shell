@@ -32,7 +32,7 @@ There are a variety of online resources we hope to use materials from. We intend
 - Text Editor : Anusha
 - Piping and Redirection : Prava
 - Easter Eggs/Fun Commands : Allison
+
 Note that all team members are responsible for brainstorming easter eggs.
 
-4) What are your first steps?  Describe at least three concrete tasks that you can do immediately, and identify which member of the team will do them.  For each one, what is the "definition of done"; that is, what will you produce to demonstrate that the task is done?
 
