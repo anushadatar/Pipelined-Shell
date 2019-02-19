@@ -21,7 +21,7 @@ Our learning goals include learning more about operating-system level design and
 There are a variety of online resources we hope to use materials from. We intend to consult a variety of resources instead ofjust emulating one or a few in order to learn as much as possible.
 
 - [GeeksForGeeks](https://www.geeksforgeeks.org/making-linux-shell-c/)
-- [write a Shell in C](https://brennan.io/2015/01/16/write-a-shell-in-c/)
+- [Write a Shell in C](https://brennan.io/2015/01/16/write-a-shell-in-c/)
 - [Writing Your Own Shell](https://linuxgazette.net/111/ramankutty.html?fbclid=IwAR3mdTB2vjYqhulVOm8cznGwRQLUzhDnC0SEyCys2I88kDHnyD8nYuHTVyU)
 - [Build Your Own Text Editor](https://viewsourcecode.org/snaptoken/kilo/)
 - [Redirection and Pipes in C](http://www.sarathlakshman.com/2012/09/24/implementation-overview-of-redirection-and-pipe-operators-in-shell)
