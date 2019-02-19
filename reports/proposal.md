@@ -10,7 +10,7 @@ Our minimum viable product includes:
 
 Stretch goals we could pursue include:
 - Implementation of more fun linux commands, like _cal_ and _sl_
-- Support for piping and redirection, and globbing
+- Support for piping, redirection, and globbing
 - Inclusion of exciting easter eggs associated with [GridWorld](https://apcentral.collegeboard.org/courses/ap-computer-science-a/classroom-resources/gridworld-case-study)
 - Creation of a basic text editor that works in the shell (like [Vim](https://www.vim.org/))
 
@@ -32,7 +32,7 @@ There are a variety of online resources we hope to use materials from. We intend
 2. Meet to consolidate basic shell design and finalize product to build off of. This will be done by all team members and should result in a consolidated file.
 3. Explore future goals (do basic research, find resources, etc.):
 - Text Editor : Anusha
-- Piping and Redirection : Prava
+- Piping, Redirection and Globbing : Prava
 - Fun Commands : Allison
 - Easter Eggs : Allison and Prava
 
