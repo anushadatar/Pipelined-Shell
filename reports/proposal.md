@@ -32,7 +32,8 @@ There are a variety of online resources we hope to use materials from. We intend
 3. Explore future goals (do basic research, find resources, etc.):
 - Text Editor : Anusha
 - Piping and Redirection : Prava
-- Easter Eggs/Fun Commands : Allison
+- Fun Commands : Allison
+- Easter Eggs : Allison and Prava
 
 Note that all team members are responsible for brainstorming easter eggs.
 
