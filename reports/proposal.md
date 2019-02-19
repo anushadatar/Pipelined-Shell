@@ -6,10 +6,11 @@ The goal of our project is to develop a functional UNIX shell.
 
 Our minimum viable product includes:
 - Implementation of basic commands (_ls_, _cd_, _rm_, _cp_, _mv_, _mkdir_, _man_)
-- Support for piping and redirection
+- Understanding of how a UNIX shell is implemented
 
 Stretch goals we could pursue include:
 - Implementation of more fun linux commands, like _cal_ and _sl_
+- Support for piping and redirection, and globbing
 - Inclusion of exciting easter eggs associated with [GridWorld](https://apcentral.collegeboard.org/courses/ap-computer-science-a/classroom-resources/gridworld-case-study)
 - Creation of a basic text editor that works in the shell (like [Vim](https://www.vim.org/))
 
