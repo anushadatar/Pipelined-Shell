@@ -8,5 +8,6 @@ Here are the ideas we have so far for potential easter eggs for our shell.
 - Click a certain number of times and launch . . . something
 - Type Vicky's name, generates a text image of her
 - Type nonsense and instead of an error it will launch a random command
+- Generate something from AP Java's gridworld, but without object-oriented design
 
 The community is welcome to submit pull requests to add your own ideas
