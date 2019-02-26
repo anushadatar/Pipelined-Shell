@@ -1,12 +1,67 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+#include "ThinkGridWorldShell.h"
 
 #define INPUT_BUFF_SIZE 1024;
 #define PARAM_BUFF_SIZE 64;
+#define NUM_BUILTINS 1;
 
 int toExit = 0;
 
+/*
+*/
+char *BUILTIN_COMMANDS[] = {"cd"};
+/*
+*/
+int (*BUILTIN_COMMAND_FUNCTIONS[]) (char**) = {
+     &shell_cd
+};
+
+int shell_cd(char **inputParams) {
+    if (inputParams[1] == NULL) {
+        perror("shell");
+    } else {
+        if (chdir(inputParams[1]) != 0) {
+            perror("shell");
+        }
+    }
+    return 1;
+}
+
+/*
+
+*/
+int execute(char **inputParams)
+{
+    int i;
+    for (i = 0; i < NUM_BUILTINS; i++) {
+        if (strcmp(inputParams[0], BUILTIN_COMMANDS[i]) == 0) {
+            return (*BUILTIN_COMMANDS[i])(inputParams);
+        }
+    }
+    /* If it is not a built-in command, go ahead and execute. */
+    pid_t process, waitProcess;
+    int process_state;
+
+    process = fork();
+    if (process == 0) {
+        if (execvp(inputParams[0], inputParams) == -1) {
+            perror("shell");
+        }
+        exit(EXIT_FAILURE);
+    } else if (process < 0) {
+        perror("shell");
+    } else {
+        do {
+            waitProcess = waitpid(process, &process_state, WUNTRACED);
+        } while (!WIFEXITED(process_state) && !WIFSIGNALED(process_state)); 
+    }
+    return 1;
+}
 /*
   Reads and seperates user parameters on a single line
 
@@ -44,10 +99,11 @@ char* readLine(){
   Loops through reading and parsing lines until exit command is reached
 
 */
-void shell_lop(){
+void shell_loop(){
   while(1){
     char *inputLine = readLine();
     char **inputParams = parseParams(inputLine);
+    int status = execute(inputParams);
     toExit = 1;  //Tempory Force Break until error handling
     if(toExit){
       break;
@@ -56,6 +112,6 @@ void shell_lop(){
 }
 
 int main(int argc, char **argv){
-  shell_lop();
+  shell_loop();
   return 0;
 }
