@@ -38,19 +38,20 @@ int shell_cd(char **inputParams) {
 int execute(char **inputParams)
 {
     int i;
-    for (i = 0; i < NUM_BUILTINS; i++) {
+    for (i = 0; i < 1; i++) {
         if (strcmp(inputParams[0], BUILTIN_COMMANDS[i]) == 0) {
-            return (*BUILTIN_COMMANDS[i])(inputParams);
+            return (*BUILTIN_COMMAND_FUNCTIONS[i])(inputParams);
         }
     }
     /* If it is not a built-in command, go ahead and execute. */
     pid_t process, waitProcess;
     int process_state;
-
+    printf("Kicking off process");
     process = fork();
     if (process == 0) {
         if (execvp(inputParams[0], inputParams) == -1) {
             perror("shell");
+
         }
         exit(EXIT_FAILURE);
     } else if (process < 0) {
@@ -76,8 +77,8 @@ char** parseParams(char *inputLine){
   int i=0;
   while(token!=NULL){
       paramsList[i]= token;
-      token = strtok(NULL," ");
       i++;
+      token = strtok(NULL," ");
   }
   paramsList[i]=NULL;
   return paramsList;
@@ -88,8 +89,9 @@ char** parseParams(char *inputLine){
 
 */
 char* readLine(){
-  size_t size = INPUT_BUFF_SIZE; //automatically allocated with getline
-  char *inputBuff = (char *)malloc(size * sizeof(char));
+  size_t size = 0; //INPUT_BUFF_SIZE; //automatically allocated with getline
+//char *inputBuff = (char *)malloc(size * sizeof(char));
+  char* inputBuff = NULL;
   printf(">>> ");
   getline(&inputBuff,&size,stdin);
   return inputBuff;
@@ -104,10 +106,10 @@ void shell_loop(){
     char *inputLine = readLine();
     char **inputParams = parseParams(inputLine);
     int status = execute(inputParams);
-    toExit = 1;  //Tempory Force Break until error handling
+   /* toExit = 1;  //Tempory Force Break until error handling
     if(toExit){
       break;
-    }
+    }*/
   }
 }
 
