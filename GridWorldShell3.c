@@ -8,7 +8,7 @@
 
 int toExit;
 
-typedef struct SimpleCommand{
+typedef struct{
   int numberOfAvailableArguments;
   int numberOfArguments;
   char ** arguments;
@@ -20,7 +20,7 @@ typedef struct SimpleCommand{
 // Describes a complete command with the multiple pipes if any
 // and input/output redirection if any.
 
-typedef struct Command{
+typedef struct{
   int numberOfAvailableSimpleCommands;
   int numberOfSimpleCommands;
   SimpleCommand ** simpleCommands;
@@ -28,13 +28,6 @@ typedef struct Command{
   char * inputFile;
   char * errFile;
   int background;
-  // void prompt();
-
-  // void print();
-  // void execute();
-  // void clear();
-  // Command();
-  // void insertSimpleCommand( SimpleCommand * simpleCommand );
 
 }Command;
 
@@ -52,13 +45,37 @@ void SimpleCommandInit(){
   {
     currentSimpleCommand->arguments[i] = malloc(sizeof(char) * PARAM_BUFF_SIZE);
   }
-  // currentSimpleCommand->arguments = (char*)malloc(sizeof(char)*PARAM_BUFF_SIZE);
 }
 
 void insertArgument(char* argument){
   int pos = currentSimpleCommand->numberOfArguments;
   currentSimpleCommand->arguments[pos] = argument;
   currentSimpleCommand->numberOfArguments = pos+1;
+}
+
+
+void CommandInit(){
+  //TODO: make command INIT
+}
+
+void prompt(){
+  //TODO: make
+}
+
+void execute(){
+  //TODO: make
+}
+
+void print(){
+  //TODO: make
+}
+
+void clear(){
+  //TODO: make
+}
+
+void insertSimpleCommand( SimpleCommand * simpleCommand ){
+  //TODO: make
 }
 
 void shell_loop(){
