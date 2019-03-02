@@ -5,38 +5,39 @@
 #define PARAM_BUFF_SIZE 64
 #define NAME_BUFF_SIZE 64
 #define NUMOFARGUMENTS 10
+#define NUMOFCOMMANDS 10
 
 int toExit;
 
-typedef struct{
+typedef struct SimpleCommand{
   int numberOfAvailableArguments;
   int numberOfArguments;
   char ** arguments;
   // void SimpleCommand();
   // void insertArgument(char *argument);
-}SimpleCommand;
+}simpleCommand;
 
 
 // Describes a complete command with the multiple pipes if any
 // and input/output redirection if any.
 
-typedef struct{
+typedef struct Command{
   int numberOfAvailableSimpleCommands;
   int numberOfSimpleCommands;
-  SimpleCommand ** simpleCommands;
+  struct SimpleCommand ** simpleCommands;
   char * outputFile;
   char * inputFile;
   char * errFile;
-  int background;
+  //int background;
 
-}Command;
+}command;
 
 
-static struct Command currentCommand;
+static struct Command *currentCommand;
 static struct SimpleCommand *currentSimpleCommand;
 
 void SimpleCommandInit(){
-  currentSimpleCommand = (SimpleCommand*)malloc(sizeof(SimpleCommand));
+  currentSimpleCommand = (simpleCommand*)malloc(sizeof(simpleCommand));
   currentSimpleCommand->numberOfAvailableArguments=NUMOFARGUMENTS; // Will change when implmenting remalloc()
   currentSimpleCommand->numberOfArguments = 0;
   currentSimpleCommand->arguments = malloc(sizeof(char)*PARAM_BUFF_SIZE * NUMOFARGUMENTS);
@@ -55,7 +56,16 @@ void insertArgument(char* argument){
 
 
 void CommandInit(){
-  //TODO: make command INIT
+  currentCommand = (command*)malloc(sizeof(command));
+  currentCommand->numberOfAvailableSimpleCommands = NUMOFCOMMANDS;
+  currentCommand->numberOfSimpleCommands = 0;
+  currentCommand->simpleCommands = malloc(sizeof(simpleCommand)* NUMOFCOMMANDS);
+  int i;
+  for (i = 0; i < NUMOFCOMMANDS; i++)
+  {
+    currentCommand->simpleCommands[i] = malloc(sizeof(simpleCommand));
+  }
+
 }
 
 void prompt(){
@@ -71,11 +81,13 @@ void print(){
 }
 
 void clear(){
-  //TODO: make
+  free(currentSimpleCommand);
+  free(currentCommand);
 }
 
-void insertSimpleCommand( SimpleCommand * simpleCommand ){
-  //TODO: make
+void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
+  int posOfCommands = currentCommand->numberOfSimpleCommands;
+  currentCommand->simpleCommands[posOfCommands] = simpleCommand;
 }
 
 void shell_loop(){
