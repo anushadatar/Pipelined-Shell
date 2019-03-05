@@ -1,13 +1,42 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <string.h>
+#include <signal.h>
+// #include <regexpr.h>
+#include <pwd.h>
+#include "GridWorldShell3.h"
 
-#define PARAM_BUFF_SIZE 64
-#define NAME_BUFF_SIZE 64
-#define NUMOFARGUMENTS 10
-#define NUMOFCOMMANDS 10
+int toExit = 0;
 
-int toExit;
+// struct SimpleCommand{
+//   numberOfAvailableArguments = NUMOFARGUMENTS;
+//   numberOfArguments = 0;
+//   arguments = (char **) malloc(numberOfArguments * sizeof(char));
+//   // void SimpleCommand();
+//   // void insertArgument(char *argument);
+// }simpleCommand;
+
+
+// // Describes a complete command with the multiple pipes if any
+// // and input/output redirection if any.
+
+// Command{
+//   numberOfAvailableSimpleCommands = NUMOFCOMMANDS;
+//   numberOfSimpleCommands = 0;
+//   commands = (simpleCommand **) malloc(numberOfSimpleCommands * sizeof(char));
+//   struct SimpleCommand ** simpleCommands;
+//   outputFile = 0;
+//   inputFile = 0;
+//   errFile = 0;
+//   //int background;
+
+// }command;
 
 typedef struct SimpleCommand{
   int numberOfAvailableArguments;
@@ -18,12 +47,10 @@ typedef struct SimpleCommand{
 }simpleCommand;
 
 
-// Describes a complete command with the multiple pipes if any
-// and input/output redirection if any.
-
 typedef struct Command{
   int numberOfAvailableSimpleCommands;
   int numberOfSimpleCommands;
+  char ** commands;
   struct SimpleCommand ** simpleCommands;
   char * outputFile;
   char * inputFile;
@@ -32,13 +59,16 @@ typedef struct Command{
 
 }command;
 
-
 static struct Command *currentCommand;
 static struct SimpleCommand *currentSimpleCommand;
 
+// currentSimpleCommand->numberOfAvailableArguments = NUMOFARGUMENTS;
+// currentSimpleCommand->numberOfArguments = 0;
+// currentSimpleCommand->arguments = (char **) malloc(currentSimpleCommand->numberOfArguments * sizeof(char));;
+
 void SimpleCommandInit(){
   currentSimpleCommand = (simpleCommand*)malloc(sizeof(simpleCommand));
-  currentSimpleCommand->numberOfAvailableArguments=NUMOFARGUMENTS; // Will change when implmenting remalloc()
+  currentSimpleCommand->numberOfAvailableArguments=NUMOFARGUMENTS; // Will change when implmenting realloc()
   currentSimpleCommand->numberOfArguments = 0;
   currentSimpleCommand->arguments = malloc(sizeof(char)*PARAM_BUFF_SIZE * NUMOFARGUMENTS);
   int i;
@@ -49,6 +79,11 @@ void SimpleCommandInit(){
 }
 
 void insertArgument(char* argument){
+  if (currentSimpleCommand->numberOfAvailableArguments == currentSimpleCommand->numberOfArguments) {
+    currentSimpleCommand->numberOfAvailableArguments *= SCALEFACTOR;
+    (simpleCommand **) currentSimpleCommand->arguments = (char **) realloc(currentSimpleCommand->arguments, currentSimpleCommand->numberOfAvailableArguments * sizeof(simpleCommand *));
+  }
+
   int pos = currentSimpleCommand->numberOfArguments;
   currentSimpleCommand->arguments[pos] = argument;
   currentSimpleCommand->numberOfArguments = pos+1;
@@ -74,6 +109,54 @@ void prompt(){
 
 void execute(){
   //TODO: make
+
+  int tmpin = dup(0);
+  int tmpout = dup(1);
+
+  int fdin;
+  if (currentCommand->inputFile) {
+    fdin = open(currentCommand->inputFile, O_RDONLY);
+  }
+  else {
+    fdin = dup(tmpin);
+  }
+
+  int ret;
+  int fdout;
+  for (int i = 0; i < currentCommand->numberOfSimpleCommands; i++) {
+    dup2(fdin, 0);
+    close(fdin);
+
+    if (i == currentCommand->numberOfSimpleCommands - 1) {
+      if (currentCommand->outputFile) {
+        fdout = open(currentCommand->outputFile, O_WRONLY);
+      }
+      else {
+        fdout = dup(tmpout);
+      }
+    }
+    else {
+      int fdpipe[2];
+      pipe(fdpipe);
+      fdin = fdpipe[0];
+      fdout = fdpipe[1];
+    }
+
+    dup2(fdout, 1);
+    close(fdout);
+
+    ret = fork();
+    if (!ret) {
+      execvp(currentSimpleCommand->arguments[0], currentSimpleCommand->arguments[0]);
+      perror(currentSimpleCommand->arguments[0]);
+      exit(1);
+    }
+  }
+
+  dup2(tmpin, 0);
+  dup2(tmpout, 1);
+  close(tmpin);
+  close(tmpout);
 }
 
 void print(){
@@ -86,6 +169,10 @@ void clear(){
 }
 
 void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
+  if (currentCommand->numberOfAvailableSimpleCommands == currentCommand->numberOfSimpleCommands) {
+    currentCommand->numberOfAvailableSimpleCommands *= SCALEFACTOR;
+    currentCommand->commands = (simpleCommand **) realloc(currentCommand->commands, currentCommand->numberOfAvailableSimpleCommands * sizeof(simpleCommand *));
+  }
   int posOfCommands = currentCommand->numberOfSimpleCommands;
   currentCommand->simpleCommands[posOfCommands] = simpleCommand;
 }

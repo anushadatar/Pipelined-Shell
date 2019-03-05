@@ -1,3 +1,10 @@
+#include <stdio.h>
+#include <dirent.h>
+#include <regexp.h>
+#include "GridWorldShell.h"
+
+int isWildcard = 0;
+
 goal: command_list;
 
 arg_list:
@@ -42,3 +49,11 @@ command_list :
     command_list command_line
     ; /* Command loop */
 
+void expandWildCard(char*  arg) {
+    if (strchr(arg, *) == NULL &&  strchr(arg, ?) == NULL) {
+        currentSimpleCommand->insertArgument(arg);
+        return;
+    }
+
+    char * reg = 
+}
