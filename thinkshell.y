@@ -1,5 +1,11 @@
-goal: command_list;
+%{
 
+%}
+
+%token <string> WORD;
+
+%%
+goal: command_list;
 arg_list:
     arg_list WORD
     | /*empty*/
@@ -15,11 +21,11 @@ pipe_list:
     ;
 
 io_modifier:
-    GREATGREAT Word
-    | GREAT Word
-    | GREATGREATAMPERSAND Word
-    | GREATAMPERSAND Word
-    | LESS Word
+    GREATGREAT WORD
+    | GREAT WORD
+    | GREATGREATAMPERSAND WORD
+    | GREATAMPERSAND WORD
+    | LESS WORD
     ;
 
 io_modifier_list:
@@ -41,4 +47,4 @@ command_line:
 command_list :
     command_list command_line
     ; /* Command loop */
-
+%%

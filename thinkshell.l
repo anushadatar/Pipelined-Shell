@@ -4,7 +4,7 @@
 
 %{ 
 #include <string.h>
-#include "y.tab.c" 
+#include "y.tab.h" 
 
 /* Global variables can live here. */
 %}

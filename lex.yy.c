@@ -448,7 +448,7 @@ char *yytext;
 /* This code goes directly into the file. */
 #line 6 "thinkshell.l"
 #include <string.h>
-#include "y.tab.h" 
+#include "y.tab.c" 
 
 /* Global variables can live here. */
 #line 455 "lex.yy.c"
