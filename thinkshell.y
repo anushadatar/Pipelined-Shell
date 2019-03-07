@@ -2,10 +2,15 @@
 
 %}
 
-%token <string> WORD;
+%token <string_val> WORD;
+%token NEWLINE GREAT LESS GREATGREAT GREATAMPERSAND PIPE AMPERSAND GREATGREATAMPERSAND NOTOKEN
 
 %%
-goal: command_list;
+
+goal: 
+    command_list
+    ;
+
 arg_list:
     arg_list WORD
     | /*empty*/
@@ -33,7 +38,7 @@ io_modifier_list:
         | /*empty*/
         ;
 
-background_optional:
+background_opt:
     AMPERSAND 
     | /*empty*/
     ;
@@ -45,6 +50,6 @@ command_line:
         /* error recovery */
 
 command_list :
-    command_list command_line
+    command_line
     ; /* Command loop */
 %%
