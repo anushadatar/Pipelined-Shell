@@ -1,4 +1,5 @@
 %{
+
 %}
 
 %token <string_val> WORD;

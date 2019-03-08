@@ -4,9 +4,18 @@
 
 %{ 
 #include <string.h>
+#include "util.h"
 #include "y.tab.h" 
 
-extern YYSTYPE yylval;
+YYSTYPE yylval;
+
+/*typedef struct {                                                                
+    char* string_val;                                                           
+} YYSTYPE;                                                                      
+  */                                                                              
+int yywrap(void) {                                                              
+    return 1;                                                                   
+}        
 
 /* Global variables can live here. */
 %}
