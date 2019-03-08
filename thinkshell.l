@@ -6,6 +6,8 @@
 #include <string.h>
 #include "y.tab.h" 
 
+extern YYSTYPE yylval;
+
 /* Global variables can live here. */
 %}
 
