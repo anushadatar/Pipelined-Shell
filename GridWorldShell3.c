@@ -31,7 +31,7 @@ typedef struct Command{
   char * outputFile;
   char * inputFile;
   char * errFile;
-  //int background;
+  int background;
 
 }command;
 
@@ -141,6 +141,47 @@ void print(){
 }
 
 void clear(){
+<<<<<<< HEAD
+=======
+
+  for (int i = 0; i < currentCommand->numberOfSimpleCommands; i++) {
+    for (int j = 0; j < currentCommand->commands[i]->numberOfArguments; j++) {
+      if (currentCommand->commands[i]->arguments[j]) {
+        free(currentCommand->commands[i]->arguments[j]);
+      }
+    }
+    if (currentCommand->commands[i]->arguments) {
+        free(currentCommand->commands[i]->arguments);
+    }
+    if (currentCommand->commands[i]) {
+        free(currentCommand->commands[i]);
+    }
+  }
+
+  for (int i = 0; i < currentSimpleCommand->numberOfArguments; i++) {
+    if (currentCommand->arguments[i]) {
+        free(currentCommand->arguments[i]);
+    }
+  }
+  if (currentSimpleCommand->arguments) {
+        free(currentCommand->arguments);
+  }
+
+  if (currentCommand->inputFile) {
+    free(currentCommand->inputFile);
+  }
+  
+  if (currentCommand->outputFile) {
+    free(currentCommand->outputFile);
+  }
+
+  if (currentCommand->errFile) {
+    free(currentCommand->errFile);
+  }
+
+  free(currentCommand);
+  free(currentSimpleCommand);
+>>>>>>> a0ff93701cb64d8c4da69708e75ba0bfa22f26ec
 }
 
 void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
@@ -170,7 +211,7 @@ void shell_loop(){
   }
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)]{
   shell_loop();
   return 0;
 }
