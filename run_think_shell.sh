@@ -1,3 +1,3 @@
 lex thinkshell.l
-bison -dy thinkshell.y
-gcc lex.yy.c
+yacc -y thinkshell.y
+gcc lex.yy.c y.tab.c
