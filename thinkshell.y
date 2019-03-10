@@ -31,11 +31,14 @@ io_modifier:
 
 io_modifier_list:
     io_modifier_list io_modifier
+        | io_modifier
         | /*empty*/
         ;
 
 background_optional:
-    AMPERSAND 
+    AMPERSAND {
+        currentCommand-> background = 1;
+    }
     | /*empty*/
     ;
 

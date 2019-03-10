@@ -55,7 +55,7 @@ typedef struct Command{
   char * outputFile;
   char * inputFile;
   char * errFile;
-  //int background;
+  int background;
 
 }command;
 
