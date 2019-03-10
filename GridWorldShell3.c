@@ -141,17 +141,15 @@ void print(){
 }
 
 void clear(){
-<<<<<<< HEAD
-=======
 
   for (int i = 0; i < currentCommand->numberOfSimpleCommands; i++) {
-    for (int j = 0; j < currentCommand->commands[i]->numberOfArguments; j++) {
-      if (currentCommand->commands[i]->arguments[j]) {
-        free(currentCommand->commands[i]->arguments[j]);
+    for (int j = 0; j < currentCommand->simpleCommands[i]->numberOfArguments; j++) {
+      if (currentCommand->simpleCommands[i]->arguments[j]) {
+        free(currentCommand->simpleCommands[i]->arguments[j]);
       }
     }
-    if (currentCommand->commands[i]->arguments) {
-        free(currentCommand->commands[i]->arguments);
+    if (currentCommand->simpleCommands[i]->arguments) {
+        free(currentCommand->simpleCommands[i]->arguments);
     }
     if (currentCommand->commands[i]) {
         free(currentCommand->commands[i]);
@@ -159,18 +157,18 @@ void clear(){
   }
 
   for (int i = 0; i < currentSimpleCommand->numberOfArguments; i++) {
-    if (currentCommand->arguments[i]) {
-        free(currentCommand->arguments[i]);
+    if (currentCommand->commands[i]) {
+        free(currentCommand->commands[i]);
     }
   }
   if (currentSimpleCommand->arguments) {
-        free(currentCommand->arguments);
+        free(currentSimpleCommand->arguments);
   }
 
   if (currentCommand->inputFile) {
     free(currentCommand->inputFile);
   }
-  
+
   if (currentCommand->outputFile) {
     free(currentCommand->outputFile);
   }
@@ -181,7 +179,6 @@ void clear(){
 
   free(currentCommand);
   free(currentSimpleCommand);
->>>>>>> a0ff93701cb64d8c4da69708e75ba0bfa22f26ec
 }
 
 void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
@@ -197,8 +194,8 @@ void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
 void shell_loop(){
   while(1){
    SimpleCommandInit();
-   insertArgument("man");
    insertArgument("ls");
+   insertArgument("..");
    CommandInit();
    insertSimpleCommand(currentSimpleCommand);
    printf("%s\n", currentSimpleCommand->arguments[0]);
@@ -211,7 +208,7 @@ void shell_loop(){
   }
 }
 
-int main(int argc, char **argv)]{
+int main(int argc, char **argv){
   shell_loop();
   return 0;
 }
