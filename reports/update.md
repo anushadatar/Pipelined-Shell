@@ -1,3 +1,6 @@
+# Think GridWorld : A Shell 
+## Allison Basore, Anusha Datar, and Prava Dhulipalla
+
 ## Project Goals
 
 The goal of our project is to develop a functional UNIX shell.
