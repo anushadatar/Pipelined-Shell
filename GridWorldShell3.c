@@ -14,30 +14,6 @@
 
 int toExit = 0;
 
-// struct SimpleCommand{
-//   numberOfAvailableArguments = NUMOFARGUMENTS;
-//   numberOfArguments = 0;
-//   arguments = (char **) malloc(numberOfArguments * sizeof(char));
-//   // void SimpleCommand();
-//   // void insertArgument(char *argument);
-// }simpleCommand;
-
-
-// // Describes a complete command with the multiple pipes if any
-// // and input/output redirection if any.
-
-// Command{
-//   numberOfAvailableSimpleCommands = NUMOFCOMMANDS;
-//   numberOfSimpleCommands = 0;
-//   commands = (simpleCommand **) malloc(numberOfSimpleCommands * sizeof(char));
-//   struct SimpleCommand ** simpleCommands;
-//   outputFile = 0;
-//   inputFile = 0;
-//   errFile = 0;
-//   //int background;
-
-// }command;
-
 typedef struct SimpleCommand{
   int numberOfAvailableArguments;
   int numberOfArguments;
@@ -58,6 +34,7 @@ typedef struct Command{
   int background;
 
 }command;
+
 
 static struct Command *currentCommand;
 static struct SimpleCommand *currentSimpleCommand;
@@ -81,7 +58,7 @@ void SimpleCommandInit(){
 void insertArgument(char* argument){
   if (currentSimpleCommand->numberOfAvailableArguments == currentSimpleCommand->numberOfArguments) {
     currentSimpleCommand->numberOfAvailableArguments *= SCALEFACTOR;
-    (simpleCommand **) currentSimpleCommand->arguments = (char **) realloc(currentSimpleCommand->arguments, currentSimpleCommand->numberOfAvailableArguments * sizeof(simpleCommand *));
+    currentSimpleCommand->arguments = realloc(currentSimpleCommand->arguments, NUMOFARGUMENTS*SCALEFACTOR * sizeof(simpleCommand));
   }
 
   int pos = currentSimpleCommand->numberOfArguments;
@@ -147,7 +124,7 @@ void execute(){
 
     ret = fork();
     if (!ret) {
-      execvp(currentSimpleCommand->arguments[0], currentSimpleCommand->arguments[0]);
+      execvp(currentSimpleCommand->arguments[0], &currentSimpleCommand->arguments[0]);
       perror(currentSimpleCommand->arguments[0]);
       exit(1);
     }
@@ -171,7 +148,7 @@ void clear(){
 void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
   if (currentCommand->numberOfAvailableSimpleCommands == currentCommand->numberOfSimpleCommands) {
     currentCommand->numberOfAvailableSimpleCommands *= SCALEFACTOR;
-    currentCommand->commands = (simpleCommand **) realloc(currentCommand->commands, currentCommand->numberOfAvailableSimpleCommands * sizeof(simpleCommand *));
+    currentCommand->simpleCommands = realloc(currentCommand->simpleCommands, NUMOFCOMMANDS * SCALEFACTOR * sizeof(simpleCommand));
   }
   int posOfCommands = currentCommand->numberOfSimpleCommands;
   currentCommand->simpleCommands[posOfCommands] = simpleCommand;
@@ -181,7 +158,10 @@ void shell_loop(){
   while(1){
    SimpleCommandInit();
    insertArgument("ls");
+   CommandInit();
+   insertSimpleCommand(currentSimpleCommand);
    printf("%s\n", currentSimpleCommand->arguments[0]);
+   printf("%s\n", currentCommand->simpleCommands[0]->arguments[0]);
    toExit = 1;  //Tempory Force Break until error handling
     if(toExit){
       break;
