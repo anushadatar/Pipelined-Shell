@@ -5,7 +5,6 @@
 %{ 
 #include <string.h>
 #include "util.h"
-#include "y.tab.h" 
 
 YYSTYPE yylval;
 

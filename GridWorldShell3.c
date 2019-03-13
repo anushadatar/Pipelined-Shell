@@ -102,7 +102,7 @@ void shell_loop(){
   }
 }
 
-int main(int argc, char **argv){
+/*int main(int argc, char **argv){
   shell_loop();
   return 0;
-}
+}*/
