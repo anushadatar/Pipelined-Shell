@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "GridWorldShell3.c"
+#include "GridWorldShell3.h"
 #include "util.h"
 #include "y.tab.h"
 
