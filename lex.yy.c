@@ -449,7 +449,7 @@ char *yytext;
 #line 6 "thinkshell.l"
 #include <string.h>
 #include "util.h"
-
+#include "y.tab.h"
 YYSTYPE yylval;
 
 /*typedef struct {                                                                

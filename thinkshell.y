@@ -12,12 +12,6 @@ void yyerror(const char *str)
 {
     fprintf(stderr, "error: %s\n", str);
 }
-/*
-int yywrap() 
-{
-    return 1;
-}
-*/
 
 int main()
 {
@@ -48,6 +42,7 @@ command:
 simple_command:
     pipe_list io_modifier_list background_opt NEWLINE {
        // TODO Code to execute current command.
+        execute();
     }
     | NEWLINE
     | error NEWLINE {
@@ -58,8 +53,8 @@ simple_command:
 command_and_args:
     command_word arg_list {
         // TODO Insert simple command.
-        // or expand wildcards if necessary.
-     }
+        insertSimpleCommand(currentSimpleCommand); 
+    }
     ;
 
 arg_list:
@@ -72,7 +67,10 @@ argument:
     ;
 
 command_word:
-    WORD {
+    WORD 
+    {
+        SimpleCommandInit();
+        insertArgument( $1 );    
         // New simple command
         // Insert arguments from shell
     }
@@ -103,13 +101,16 @@ background_opt:
 
 io_modifier_opt:
     GREAT WORD {
+        *currentCommand->outputFile = $2;
     
     }
     | GREATGREAT WORD {
-
+        // TODO This needs to append if possible.
+        *currentCommand->outputFile = $2;
     }
     | GREATGREATAMPERSAND WORD {
-    }
+   
+     }
     | GREATAMPERSAND WORD {
     }
     | LESS WORD {

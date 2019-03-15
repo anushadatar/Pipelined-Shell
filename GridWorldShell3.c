@@ -36,8 +36,8 @@ typedef struct Command{
 }command;
 */
 
-static struct Command *currentCommand;
-static struct SimpleCommand *currentSimpleCommand;
+//static struct Command *currentCommand;
+//static struct SimpleCommand *currentSimpleCommand;
 
 // currentSimpleCommand->numberOfAvailableArguments = NUMOFARGUMENTS;
 // currentSimpleCommand->numberOfArguments = 0;
