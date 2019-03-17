@@ -448,11 +448,22 @@ char *yytext;
 /* This code goes directly into the file. */
 #line 6 "thinkshell.l"
 #include <string.h>
+#include "util.h"
 #include "y.tab.h" 
 
+YYSTYPE yylval;
+
+/*typedef struct {                                                                
+    char* string_val;                                                           
+} YYSTYPE;                                                                      
+  */                                                                              
+int yywrap(void) {                                                              
+    return 1;                                                                   
+}        
+
 /* Global variables can live here. */
-#line 455 "lex.yy.c"
-#line 456 "lex.yy.c"
+#line 466 "lex.yy.c"
+#line 467 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -669,9 +680,9 @@ YY_DECL
 		}
 
 	{
-#line 12 "thinkshell.l"
+#line 23 "thinkshell.l"
 
-#line 675 "lex.yy.c"
+#line 686 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -731,63 +742,63 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 13 "thinkshell.l"
+#line 24 "thinkshell.l"
 { 
 return NEWLINE; 
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "thinkshell.l"
+#line 28 "thinkshell.l"
 { 
     /* Discard spaces and tabs */ 
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 21 "thinkshell.l"
+#line 32 "thinkshell.l"
 { 
     return GREAT; 
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 25 "thinkshell.l"
+#line 36 "thinkshell.l"
 { 
     return LESS; 
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 29 "thinkshell.l"
+#line 40 "thinkshell.l"
 { 
     return GREATGREAT;
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 33 "thinkshell.l"
+#line 44 "thinkshell.l"
 { 
     return GREATAMPERSAND; 
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 37 "thinkshell.l"
+#line 48 "thinkshell.l"
 { 
     return PIPE; 
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 41 "thinkshell.l"
+#line 52 "thinkshell.l"
 { 
     return AMPERSAND; 
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 45 "thinkshell.l"
+#line 56 "thinkshell.l"
 {
     /* Assume that filenames only have alphanumeric characters. */
     yylval.string_val = strdup(yytext);
@@ -796,7 +807,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 51 "thinkshell.l"
+#line 62 "thinkshell.l"
 {
     /* Invalid character included in input. */
     return NOTOKEN;
@@ -804,10 +815,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 56 "thinkshell.l"
+#line 67 "thinkshell.l"
 ECHO;
 	YY_BREAK
-#line 811 "lex.yy.c"
+#line 822 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1812,6 +1823,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 56 "thinkshell.l"
+#line 67 "thinkshell.l"
 
 
