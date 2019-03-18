@@ -12,12 +12,6 @@ void yyerror(const char *str)
 {
     fprintf(stderr, "error: %s\n", str);
 }
-
-int main()
-{
-    yyparse();
-}
-
 %}
 
 %token <string_val> WORD;
@@ -84,7 +78,6 @@ pipe_list:
 io_modifier:
     io_modifier_list io_modifier_opt
     | io_modifier_opt
-    | 
     ;
 
 io_modifier_list:
@@ -96,17 +89,16 @@ background_opt:
     AMPERSAND {
         // Change background on simplecommand
     }
-    | /*empty*/
     ;
 
 io_modifier_opt:
     GREAT WORD {
-        *currentCommand->outputFile = $2;
+        currentCommand->outputFile = $2;
     
     }
     | GREATGREAT WORD {
         // TODO This needs to append if possible.
-        *currentCommand->outputFile = $2;
+        currentCommand->outputFile = $2;
     }
     | GREATGREATAMPERSAND WORD {
    

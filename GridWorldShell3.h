@@ -36,8 +36,9 @@ typedef struct Command{
     int background;
 }command;
 
-static struct Command *currentCommand;
-static struct SimpleCommand *currentSimpleCommand;
+static struct Command* currentCommand;
+static struct SimpleCommand* currentSimpleCommand;
+void insertSimpleCommand(struct SimpleCommand* simpleCommand);
 void SimpleCommandInit(void);
 void insertArgument(char* argument);
 void CommandInit(void);

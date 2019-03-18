@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -54,7 +53,7 @@ void SimpleCommandInit(){
     currentSimpleCommand->arguments[i] = malloc(sizeof(char) * PARAM_BUFF_SIZE);
   }
 }
-
+ 
 void insertArgument(char* argument){
   if (currentSimpleCommand->numberOfAvailableArguments == currentSimpleCommand->numberOfArguments) {
     currentSimpleCommand->numberOfAvailableArguments *= SCALEFACTOR;
