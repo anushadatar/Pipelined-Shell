@@ -12,6 +12,10 @@ void yyerror(const char *str)
 {
     fprintf(stderr, "error: %s\n", str);
 }
+
+int main() {
+    yyparse();
+}
 %}
 
 %token <string_val> WORD;
