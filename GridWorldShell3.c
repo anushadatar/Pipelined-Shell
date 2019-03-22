@@ -100,7 +100,6 @@ void execute(){
   int ret;
   int fdout;
   for (int i = 0; i < currentCommand->numberOfSimpleCommands; i++) {
-    printf("%s\n", "here");
     dup2(fdin, 0);
     close(fdin);
 
@@ -129,6 +128,7 @@ void execute(){
       exit(1);
     }
   }
+
 
   dup2(tmpin, 0);
   dup2(tmpout, 1);
@@ -192,14 +192,17 @@ void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
 }
 
 void shell_loop(){
+
+
   while(1){
    SimpleCommandInit();
    insertArgument("ls");
-   insertArgument("..");
+   insertArgument(NULL);
+
    CommandInit();
    insertSimpleCommand(currentSimpleCommand);
    printf("%s\n", currentSimpleCommand->arguments[0]);
-   printf("%s\n", currentCommand->simpleCommands[0]->arguments[0]);
+   printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
    execute();
    toExit = 1;  //Tempory Force Break until error handling
     if(toExit){
