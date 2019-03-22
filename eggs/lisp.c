@@ -22,9 +22,9 @@ int opadd(char* input) {
 		}
 		else {
 			int i = 0;
-			sscanf(input, "%d", &i);
+			sscanf(input++, "%d", &i);
 			result += i;
-			input++;
+			// input++;
 		}
 	}
 
@@ -35,15 +35,17 @@ int opsub(char *input) {
 	int i = 0;
 	int j = 0;
 
-	while (*input == ' ') {
-		input++;
-	}
+	// while (*input == ' ') {
+	// 	input++;
+	// }
+	while(*(++input) == ' ');
 
 	sscanf(input, "%d", &i);
 
-	while (*input == ' ') {
-		input++;
-	}
+	// while (*input == ' ') {
+	// 	input++;
+	// }
+	while(*(++input) == ' ');
 
 	sscanf(input, "%d", &j);
 
@@ -52,7 +54,7 @@ int opsub(char *input) {
 }
 
 int opprod(char* input) {
-	int result = 0;
+	int result = 1;
 
 	while (*input != ')') {
 		if (*input == ' ') {
@@ -72,17 +74,27 @@ int opdiv(char *input) {
 	int i = 0;
 	int j = 0;
 
-	while (*input == ' ') {
-		input++;
-	}
+	// while (*input == ' ') {
+	// 	input++;
+	// }
 
+	while(*(++input) == ' ');
+
+	// printf("%i", i);
 	sscanf(input, "%d", &i);
+	// printf("%i", i);
 
-	while (*input == ' ') {
-		input++;
-	}
+	// while (*input == ' ') {
+	// 	input++;
+	// }
+
+	while(*(++input) == ' ');
 
 	sscanf(input, "%d", &j);
+
+	// printf("divide");
+	// printf("%i\n", i);
+	// printf("%i\n", j);
 
 	return (i / j);
 
@@ -90,16 +102,20 @@ int opdiv(char *input) {
 
 int evaluate(char* input) {
 
-	if (*input != '(') {
-		printf("%c", *input);
-		printf("%s", input);
-		fprintf(stderr, "invalid lisp expression\n");
-		exit(1);
+	// printf("first char: %c\n", *input);
+
+	if (*(input++) != '(') {
+		// printf("%c", *input);
+		// printf("%s", input);
+		// printf("invalid lisp expression\n");
+		// exit(1);
+		// return -1;
+		return 0;
 	}
 
-	input++;
-	char *op = *input;
-	input++;
+	// input++;
+	char *op = *(input++);
+	// input++;
 
 	int result = 0;
 
@@ -122,22 +138,41 @@ int evaluate(char* input) {
 
 	if (op == '+') {
 		result = opadd(input);
+		// printf("add");
 	}
 	else if (op == '-') {
 		result = opsub(input);
+		// printf("minus");
 	}
 	else if (op == '*') {
 		result = opprod(input);
+		// printf("times");
 	}
 	else if (op == '/') {
 		result = opdiv(input);
+		// printf("divide");
 	}
 
 	return result;
 }
 
+void read(char* string, int length)
+{
+    int x;
+
+    fgets(string,length,stdin);
+    for(x=0;x<=length;x++)
+    {
+        if( string[x] == '\n')
+        {
+            string[x] = '\0';
+            break;
+        }
+    }
+}
+
 int main() {
-	char* input = malloc(256);
+	char* input = malloc(1024);
 	printf("Enter command.\n");
 
 	while(1) {
@@ -147,9 +182,9 @@ int main() {
 
 			while(1) {
 				free(input);
-				input = malloc(256);
-				fgets(input, sizeof(input), stdin);
-				// printf("%s", input);
+				input = malloc(1024);
+				// fgets(input, sizeof(input), stdin);
+				read(input, 1024);
 				// printf("The result is: ");
 				printf("-> %d\n", evaluate(input));
 			}
