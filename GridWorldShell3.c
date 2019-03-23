@@ -12,35 +12,6 @@
 #include "GridWorldShell3.h"
 
 int toExit = 0;
-/*
-typedef struct SimpleCommand{
-  int numberOfAvailableArguments;
-  int numberOfArguments;
-  char ** arguments;
-  // void SimpleCommand();
-  // void insertArgument(char *argument);
-}simpleCommand;
-
-
-typedef struct Command{
-  int numberOfAvailableSimpleCommands;
-  int numberOfSimpleCommands;
-  char ** commands;
-  struct SimpleCommand ** simpleCommands;
-  char * outputFile;
-  char * inputFile;
-  char * errFile;
-  int background;
-
-}command;
-*/
-
-//static struct Command *currentCommand;
-//static struct SimpleCommand *currentSimpleCommand;
-
-// currentSimpleCommand->numberOfAvailableArguments = NUMOFARGUMENTS;
-// currentSimpleCommand->numberOfArguments = 0;
-// currentSimpleCommand->arguments = (char **) malloc(currentSimpleCommand->numberOfArguments * sizeof(char));;
 
 void SimpleCommandInit(){
   currentSimpleCommand = (simpleCommand*)malloc(sizeof(simpleCommand));
@@ -59,7 +30,7 @@ void insertArgument(char* argument){
     currentSimpleCommand->numberOfAvailableArguments *= SCALEFACTOR;
     currentSimpleCommand->arguments = realloc(currentSimpleCommand->arguments, NUMOFARGUMENTS*SCALEFACTOR * sizeof(simpleCommand));
   }
-
+  printf("trying");
   int pos = currentSimpleCommand->numberOfArguments;
   currentSimpleCommand->arguments[pos] = argument;
   currentSimpleCommand->numberOfArguments = pos+1;
@@ -181,7 +152,7 @@ void clear(){
 }
 
 void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
-  if (currentCommand->numberOfAvailableSimpleCommands == currentCommand->numberOfSimpleCommands) {
+    if (currentCommand->numberOfAvailableSimpleCommands == currentCommand->numberOfSimpleCommands) {
     currentCommand->numberOfAvailableSimpleCommands *= SCALEFACTOR;
     currentCommand->simpleCommands = realloc(currentCommand->simpleCommands, NUMOFCOMMANDS * SCALEFACTOR * sizeof(simpleCommand));
   }
@@ -209,6 +180,7 @@ void shell_loop(){
     }
   }
 }
+
 /*
 int main(int argc, char **argv){
   shell_loop();

@@ -51,6 +51,7 @@ simple_command:
 command_and_args:
     command_word arg_list {
         // TODO Insert simple command.
+        SimpleCommandInit();
         insertSimpleCommand(currentSimpleCommand); 
     }
     ;
@@ -67,7 +68,7 @@ argument:
 command_word:
     WORD 
     {
-        SimpleCommandInit();
+   //     SimpleCommandInit();
         insertArgument( $1 );    
         // New simple command
         // Insert arguments from shell
@@ -113,3 +114,79 @@ io_modifier_opt:
     }
 ;
 %%
+/*
+#include <dirent.h>
+#include <regex.h>
+#include <string.h>
+void expandWildCard(char*  arg) {
+    if ((strchr(arg, '*') == NULL) &&  (strchr(arg, '?') == NULL)) {
+        insertArgument(arg);
+        return;
+    }
+
+    char *reg = (char*) malloc (2*strlen(arg)+10);
+    char *a = arg;
+    char *r = reg;
+    *r = '^'; //beginning of line
+    r++;
+
+    while (*a) {
+        if (*a == '*') {
+            *r = '.';
+            r++;
+            *r='*';
+            r++;
+        }
+        else if (*a == '?') {
+            *r = '.';
+            r++;
+        }
+        else if (*a == '.') {
+            *r = '\\';
+            r++;
+            *r = '.';
+            r++;
+        }
+        else {
+            *r = *a
+;            r++;
+        }
+
+        a++;
+    }
+
+    // 
+    *r = '$';
+    r++;
+    *r = 0;
+
+    regex_t re;
+
+    // char *expbuf = (char*)malloc(strlen(reg));
+    // regcomp(reg, expbuf);
+
+    int res = regcomp(&re, reg, REG_EXTENDED|REG_NOSUB);
+
+    if(res) {
+        perror("regex compilation error");
+        exit(1);
+    }
+
+    DIR * dir = opendir(".");
+    if (dir == NULL) {
+        perror("opening dict error");
+        exit(1);
+    }
+
+    struct dirent * ent;
+    while ((ent == readdir(dir)) != NULL) {
+        if (regexec(ent->d_name, re) == 0) {
+            insertArgument(strdrup(ent->d_name));
+        }
+    }
+
+    closedir(dir);
+
+}
+
+*/
