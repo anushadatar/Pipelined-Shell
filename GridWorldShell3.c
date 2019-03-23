@@ -30,7 +30,6 @@ void insertArgument(char* argument){
     currentSimpleCommand->numberOfAvailableArguments *= SCALEFACTOR;
     currentSimpleCommand->arguments = realloc(currentSimpleCommand->arguments, NUMOFARGUMENTS*SCALEFACTOR * sizeof(simpleCommand));
   }
-  printf("trying");
   int pos = currentSimpleCommand->numberOfArguments;
   currentSimpleCommand->arguments[pos] = argument;
   currentSimpleCommand->numberOfArguments = pos+1;

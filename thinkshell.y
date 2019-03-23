@@ -51,7 +51,8 @@ simple_command:
 command_and_args:
     command_word arg_list {
         // TODO Insert simple command.
-        SimpleCommandInit();
+        //Simple
+        CommandInit();
         insertSimpleCommand(currentSimpleCommand); 
     }
     ;
@@ -69,7 +70,9 @@ command_word:
     WORD 
     {
    //     SimpleCommandInit();
-        insertArgument( $1 );    
+        SimpleCommandInit();
+        insertArgument( $1 );
+        insertArgument(NULL);    
         // New simple command
         // Insert arguments from shell
     }
