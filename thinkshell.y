@@ -1,3 +1,9 @@
+// #include <stdio.h>
+// #include <dirent.h>
+// #include <regexp.h>
+// #include "GridWorldShell.h"
+
+// int isWildcard = 0;
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,7 +113,6 @@ int main(int argc, char **argv){
 
 %token <string_val> WORD;
 %token NEWLINE GREAT LESS GREATGREAT GREATAMPERSAND PIPE AMPERSAND GREATGREATAMPERSAND NOTOKEN
-
 %%
 
 goal:
@@ -159,14 +164,24 @@ command_list :
     command_line
     ; /* Command loop */
 
-void expandWildCard(char*  arg) {
-    if (strchr(arg, *) == NULL &&  strchr(arg, ?) == NULL) {
-        currentSimpleCommand->insertArgument(arg);
+
+int filecomp(const void *f1, const void *f2) {
+    const char *first = *(const char **) f1;
+    const char *second = *(const char **) f2;
+
+    return strcmp(first, second);
+}
+
+
+
+void expandWildCard(char* prefix, char*  suffix) {
+    if (strchr(suffix, '*'') == NULL &&  strchr(suffix, '?'') == NULL) {
+        currentSimpleCommand->insertArgument(suffix);
         return;
     }
 
-    char *reg = (char*) malloc (2*strlen(arg)+10);
-    char *a = arg;
+    char *reg = (char*) malloc (2*strlen(suffix)+10);
+    char *a = suffix;
     char *r = reg;
     *r = '^' //beginning of line
     r++;
@@ -189,14 +204,13 @@ void expandWildCard(char*  arg) {
             r++;
         }
         else {
-            *r = *a
-;            r++;
+            *r = *a;
+            r++;
         }
 
         a++;
     }
 
-    //
     *r = '$';
     r++;
     *r = 0;
@@ -229,3 +243,5 @@ void expandWildCard(char*  arg) {
     closedir(dir);
 
 }
+
+

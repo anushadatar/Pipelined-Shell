@@ -16,6 +16,43 @@
 #define LSH_TOK_BUFSIZE 64
 #define LSH_TOK_DELIM " \t\r\n\a"
 
+// forward declarations for built in shell commands
+void lsh_cd(char **args);
+void lsh_mkdir(char **args);
+
+// build in commands - array
+char *builtin_str[] = {
+  "cd",
+  "mkdir"
+};
+
+void (*builtin_funct[]) (char **) = {
+  &lsh_cd,
+  &lsh_mkdir
+};
+
+int lsh_num_builtins() {
+  return sizeof(builtin_str) / sizeof(char *);
+}
+
+void lsh_cd(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "lsh: expected argument \"cd\"\n");
+  }
+  else if (chdir(args[1]) != 0) {
+    perror("lsh");
+  }
+}
+
+void lsh_mkdir(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "lsh: expected argument \"mkdir\"\n");
+  }
+  else if ((mkdir(args[1],00777)) == -1) {
+    perror("lsh");
+  }
+}
+
 int toExit = 0;
 int numOfCurrentArgs;
 
@@ -257,8 +294,22 @@ void shell_loop(){
   while(1){
    SimpleCommandInit();
    CommandInit();
-   recieve_input();
-   insertSimpleCommand(currentSimpleCommand);
+   // recieve_input();
+   // insertSimpleCommand(currentSimpleCommand);
+
+   // here for now for testing purposes
+  //  for (int i = 0; i < lsh_num_builtins(); i++) {
+  //   if (strcmp(currentSimpleCommand->arguments[1], builtin_str[i]) == 0) {
+  //     (*builtin_funct[i])(currentSimpleCommand->arguments[1]);
+  //   }
+  // }
+
+   char *test[2] = {"mkdir", "test"};
+
+  lsh_mkdir(test);
+   // printf("%c\n", currentSimpleCommand->arguments[0]);
+   // printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
+   toExit = 1;  //Tempory Force Break until error handling
    execute();
     if(toExit){
       break;
