@@ -1,3 +1,9 @@
+// #include <stdio.h>
+// #include <dirent.h>
+// #include <regexp.h>
+// #include "GridWorldShell.h"
+
+// int isWildcard = 0;
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,10 +113,9 @@ int main(int argc, char **argv){
 
 %token <string_val> WORD;
 %token NEWLINE GREAT LESS GREATGREAT GREATAMPERSAND PIPE AMPERSAND GREATGREATAMPERSAND NOTOKEN
-
 %%
 
-goal: 
+goal:
     command_list
     ;
 
@@ -121,11 +126,11 @@ arg_list:
 
 cmd_and_args:
     WORD arg_list
-        ; 
+        ;
 
 pipe_list:
     pipe_list PIPE cmd_and_args
-    | cmd_and_args 
+    | cmd_and_args
     ;
 
 io_modifier:
@@ -138,11 +143,14 @@ io_modifier:
 
 io_modifier_list:
     io_modifier_list io_modifier
+        | io_modifier
         | /*empty*/
         ;
 
-background_opt:
-    AMPERSAND 
+background_optional:
+    AMPERSAND {
+        currentCommand-> background = 1;
+    }
     | /*empty*/
     ;
 
@@ -155,4 +163,85 @@ command_line:
 command_list :
     command_line
     ; /* Command loop */
-%%
+
+
+int filecomp(const void *f1, const void *f2) {
+    const char *first = *(const char **) f1;
+    const char *second = *(const char **) f2;
+
+    return strcmp(first, second);
+}
+
+
+
+void expandWildCard(char* prefix, char*  suffix) {
+    if (strchr(suffix, '*'') == NULL &&  strchr(suffix, '?'') == NULL) {
+        currentSimpleCommand->insertArgument(suffix);
+        return;
+    }
+
+    char *reg = (char*) malloc (2*strlen(suffix)+10);
+    char *a = suffix;
+    char *r = reg;
+    *r = '^' //beginning of line
+    r++;
+
+    while (*a) {
+        if (*a == '*') {
+            *r = '.';
+            r++;
+            *r='*';
+            r++;
+'        }
+        else if (*a == '?') {
+            *r = '.';
+            r++;
+        }
+        else if (*a == '.') {
+            *r = '\\';
+            r++;
+            *r = '.';
+            r++;
+        }
+        else {
+            *r = *a;
+            r++;
+        }
+
+        a++;
+    }
+
+    *r = '$';
+    r++;
+    *r = 0;
+
+    regex_t re;
+
+    // char *expbuf = (char*)malloc(strlen(reg));
+    // regcomp(reg, expbuf);
+
+    int res = regcomp(&re, reg, REG_EXTENDED|REG_NOSUB);
+
+    if(res) {
+        perror("regex compilation error");
+        exit(1);
+    }
+
+    DIR * dir = opendir(".");
+    if (dir == NULL) {
+        perror("opening dict error");
+        exit(1);
+    }
+
+    struct dirent * ent;
+    while ((ent == readdir(dir)) != NULL) {
+        if (regexec(ent->d_name, re) == 0) {
+            currentSimpleCommand->insertArgument(strdrup(ent->d_name));
+        }
+    }
+
+    closedir(dir);
+
+}
+
+
