@@ -1,189 +1,136 @@
-// #include <stdio.h>
-// #include <dirent.h>
-// #include <regexp.h>
-// #include "GridWorldShell.h"
-
-// int isWildcard = 0;
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include "GridWorldShell3.h"
 #include "util.h"
+#include "y.tab.h"
 
-#define PARAM_BUFF_SIZE 64
-#define NAME_BUFF_SIZE 64
-#define NUMOFARGUMENTS 10
-#define NUMOFCOMMANDS 10
+int yylex();
+int yyparse();
 
-int toExit;
-
-typedef struct SimpleCommand{
-  int numberOfAvailableArguments;
-  int numberOfArguments;
-  char ** arguments;
-  // void SimpleCommand();
-  // void insertArgument(char *argument);
-}simpleCommand;
-
-
-// Describes a complete command with the multiple pipes if any
-// and input/output redirection if any.
-
-typedef struct Command{
-  int numberOfAvailableSimpleCommands;
-  int numberOfSimpleCommands;
-  struct SimpleCommand ** simpleCommands;
-  char * outputFile;
-  char * inputFile;
-  char * errFile;
-  //int background;
-}command;
-
-static struct Command *currentCommand;
-static struct SimpleCommand *currentSimpleCommand;
-
-void SimpleCommandInit(){
-  currentSimpleCommand = (simpleCommand*)malloc(sizeof(simpleCommand));
-  currentSimpleCommand->numberOfAvailableArguments=NUMOFARGUMENTS; // Will change when implmenting remalloc()
-  currentSimpleCommand->numberOfArguments = 0;
-  currentSimpleCommand->arguments = malloc(sizeof(char)*PARAM_BUFF_SIZE * NUMOFARGUMENTS);
-  int i;
-  for (i = 0; i < NUMOFARGUMENTS; i++)
-  {
-    currentSimpleCommand->arguments[i] = malloc(sizeof(char) * PARAM_BUFF_SIZE);
-  }
+void yyerror(const char *str)
+{
+    fprintf(stderr, "error: %s\n", str);
 }
 
-void insertArgument(char* argument){
-  int pos = currentSimpleCommand->numberOfArguments;
-  currentSimpleCommand->arguments[pos] = argument;
-  currentSimpleCommand->numberOfArguments = pos+1;
-}
-
-void CommandInit(){
-  currentCommand = (command*)malloc(sizeof(command));
-  currentCommand->numberOfAvailableSimpleCommands = NUMOFCOMMANDS;
-  currentCommand->numberOfSimpleCommands = 0;
-  currentCommand->simpleCommands = malloc(sizeof(simpleCommand)* NUMOFCOMMANDS);
-  int i;
-  for (i = 0; i < NUMOFCOMMANDS; i++)
-  {
-    currentCommand->simpleCommands[i] = malloc(sizeof(simpleCommand));
-  }
-}
-
-void prompt(){
-  //TODO: make
-}
-
-void execute(){
-  //TODO: make
-}
-
-void print(){
-  //TODO: make
-}
-
-void clear(){
-  free(currentSimpleCommand);
-  free(currentCommand);
-}
-
-void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
-  int posOfCommands = currentCommand->numberOfSimpleCommands;
-  currentCommand->simpleCommands[posOfCommands] = simpleCommand;
-}
-
-void shell_loop(){
-  while(1){
-   SimpleCommandInit();
-   insertArgument("ls");
-   printf("%s\n", currentSimpleCommand->arguments[0]);
-   toExit = 1;  //Tempory Force Break until error handling
-    if(toExit){
-      break;
-    }
-  }
-}
-
-int main(int argc, char **argv){
-    shell_loop();
-  return 0;
+int main() {
+    yyparse();
 }
 %}
 
 %token <string_val> WORD;
 %token NEWLINE GREAT LESS GREATGREAT GREATAMPERSAND PIPE AMPERSAND GREATGREATAMPERSAND NOTOKEN
-%%
 
-goal:
+
+%%
+goal: 
     command_list
     ;
 
+command_list:
+    command_list command
+    | command
+;
+
+command:
+    simple_command
+    |    
+  ; 
+
+simple_command:
+    pipe_list io_modifier_list background_opt NEWLINE {
+       // TODO Code to execute current command.
+        execute();
+    }
+    | NEWLINE
+    | error NEWLINE {
+        yyerrok;
+    }
+    ;
+
+command_and_args:
+    command_word arg_list {
+        // TODO Insert simple command.
+        //Simple
+        CommandInit();
+        insertSimpleCommand(currentSimpleCommand); 
+    }
+    ;
+
 arg_list:
-    arg_list WORD
-    | /*empty*/
-           ;
+    arg_list argument
+    |
+    ;
 
-cmd_and_args:
-    WORD arg_list
-        ;
+argument:
+    WORD
+    ;
 
+command_word:
+    WORD 
+    {
+   //     SimpleCommandInit();
+        SimpleCommandInit();
+        insertArgument( $1 );
+        insertArgument(NULL);    
+        // New simple command
+        // Insert arguments from shell
+    }
+    ;
+  
 pipe_list:
-    pipe_list PIPE cmd_and_args
-    | cmd_and_args
+    pipe_list PIPE command_and_args
+    | command_and_args
     ;
 
 io_modifier:
-    GREATGREAT WORD
-    | GREAT WORD
-    | GREATGREATAMPERSAND WORD
-    | GREATAMPERSAND WORD
-    | LESS WORD
+    io_modifier_list io_modifier_opt
+    | io_modifier_opt
     ;
 
 io_modifier_list:
     io_modifier_list io_modifier
-        | io_modifier
         | /*empty*/
         ;
 
-background_optional:
+background_opt:
     AMPERSAND {
-        currentCommand-> background = 1;
+        // Change background on simplecommand
     }
-    | /*empty*/
     ;
 
-command_line:
-    pipe_list io_modifier_list background_opt NEWLINE
-    | NEWLINE /* accept empty cmd line */
-    | error NEWLINE{yyerrok;}
-        /* error recovery */
-
-command_list :
-    command_line
-    ; /* Command loop */
-
-
-int filecomp(const void *f1, const void *f2) {
-    const char *first = *(const char **) f1;
-    const char *second = *(const char **) f2;
-
-    return strcmp(first, second);
-}
-
-
-
-void expandWildCard(char* prefix, char*  suffix) {
-    if (strchr(suffix, '*'') == NULL &&  strchr(suffix, '?'') == NULL) {
-        currentSimpleCommand->insertArgument(suffix);
+io_modifier_opt:
+    GREAT WORD {
+        currentCommand->outputFile = $2;
+    
+    }
+    | GREATGREAT WORD {
+        // TODO This needs to append if possible.
+        currentCommand->outputFile = $2;
+    }
+    | GREATGREATAMPERSAND WORD {
+   
+     }
+    | GREATAMPERSAND WORD {
+    }
+    | LESS WORD {
+    }
+;
+%%
+/*
+#include <dirent.h>
+#include <regex.h>
+#include <string.h>
+void expandWildCard(char*  arg) {
+    if ((strchr(arg, '*') == NULL) &&  (strchr(arg, '?') == NULL)) {
+        insertArgument(arg);
         return;
     }
 
-    char *reg = (char*) malloc (2*strlen(suffix)+10);
-    char *a = suffix;
+    char *reg = (char*) malloc (2*strlen(arg)+10);
+    char *a = arg;
     char *r = reg;
-    *r = '^' //beginning of line
+    *r = '^'; //beginning of line
     r++;
 
     while (*a) {
@@ -192,7 +139,7 @@ void expandWildCard(char* prefix, char*  suffix) {
             r++;
             *r='*';
             r++;
-'        }
+        }
         else if (*a == '?') {
             *r = '.';
             r++;
@@ -204,13 +151,14 @@ void expandWildCard(char* prefix, char*  suffix) {
             r++;
         }
         else {
-            *r = *a;
-            r++;
+            *r = *a
+;            r++;
         }
 
         a++;
     }
 
+    // 
     *r = '$';
     r++;
     *r = 0;
@@ -236,7 +184,7 @@ void expandWildCard(char* prefix, char*  suffix) {
     struct dirent * ent;
     while ((ent == readdir(dir)) != NULL) {
         if (regexec(ent->d_name, re) == 0) {
-            currentSimpleCommand->insertArgument(strdrup(ent->d_name));
+            insertArgument(strdrup(ent->d_name));
         }
     }
 
@@ -244,4 +192,4 @@ void expandWildCard(char* prefix, char*  suffix) {
 
 }
 
-
+*/

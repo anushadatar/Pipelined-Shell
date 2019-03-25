@@ -1,3 +1,3 @@
 lex thinkshell.l
-yacc -y thinkshell.y
-gcc lex.yy.c y.tab.c
+yacc -dy thinkshell.y
+gcc lex.yy.c GridWorldShell3.c y.tab.c -o shell

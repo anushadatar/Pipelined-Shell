@@ -5,8 +5,8 @@
 %{ 
 #include <string.h>
 #include "util.h"
-#include "y.tab.h" 
-
+#include "y.tab.h"
+#include "GridWorldShell3.h"
 YYSTYPE yylval;
 
 /*typedef struct {                                                                
