@@ -256,14 +256,9 @@ void recieve_input() {
 void shell_loop(){
   while(1){
    SimpleCommandInit();
-   // insertArgument("ls");
-   // insertArgument(NULL);
    CommandInit();
    recieve_input();
    insertSimpleCommand(currentSimpleCommand);
-   // printf("%s\n", "Here are the current commands");
-   // printf("%s\n", currentSimpleCommand->arguments[0]);
-   // printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
    execute();
     if(toExit){
       break;
