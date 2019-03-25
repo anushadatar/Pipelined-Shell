@@ -202,10 +202,15 @@ void shell_loop(){
    CommandInit();
    insertSimpleCommand(currentSimpleCommand);
    printf("%s\n", currentSimpleCommand->arguments[0]);
-   printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
-   execute();
-   toExit = 1;  //Tempory Force Break until error handling
-    if(toExit){
+   // printf("I got here\n");
+   // printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
+   // printf("%s\n", currentCommand->simpleCommands[0]);
+   printf("%s\n", currentCommand->simpleCommands[0]->arguments[0]);
+
+   // execute();
+   // toExit = 1;  //Tempory Force Break until error handling
+    toExit++;
+    if(toExit == 5){
       break;
     }
   }

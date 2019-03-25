@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <dirent.h>
-#include <regexp.h>
-#include "GridWorldShell.h"
+// #include <stdio.h>
+// #include <dirent.h>
+// #include <regexp.h>
+// #include "GridWorldShell.h"
 
-int isWildcard = 0;
+// int isWildcard = 0;
 
 goal: command_list;
 
@@ -52,7 +52,105 @@ command_list :
     command_list command_line
     ; /* Command loop */
 
-void expandWildCard(char*  arg) {
+
+int filecomp(const void *f1, const void *f2) {
+    const char *first = *(const char **) f1;
+    const char *second = *(const char **) f2;
+
+    return strcmp(first, second);
+}
+
+void expandWildCardsifNecessary(char * arg) {
+
+    int maxEntries = 20;
+    int nEntries = 0;
+
+    char ** array = (char **) malloc (maxEntries * sizeof(char*));
+
+    if (strchr(arg, '*'') == NULL &&  strchr(arg, '?'') == NULL) {
+        currentSimpleCommand->insertArgument(arg);
+    }
+    else {
+        expandWildCard(NULL, arg);
+        qsort(table, 0, sizeof(char*), int (*filecomp)(const void*, const void*));
+        for (int i = 0; i < num; i++) {
+            currentSimpleCommand->insertArgument(table[i]);
+        }
+    }
+
+}
+
+void expandWildCard(char* prefix, char*  suffix) {
+    if (strchr(suffix, '*'') == NULL &&  strchr(suffix, '?'') == NULL) {
+        currentSimpleCommand->insertArgument(suffix);
+        return;
+    }
+
+    char *reg = (char*) malloc (2*strlen(suffix)+10);
+    char *a = suffix;
+    char *r = reg;
+    *r = '^' //beginning of line
+    r++;
+
+    while (*a) {
+        if (*a == '*') {
+            *r = '.';
+            r++;
+            *r='*';
+            r++;
+'        }
+        else if (*a == '?') {
+            *r = '.';
+            r++;
+        }
+        else if (*a == '.') {
+            *r = '\\';
+            r++;
+            *r = '.';
+            r++;
+        }
+        else {
+            *r = *a;
+            r++;
+        }
+
+        a++;
+    }
+
+    *r = '$';
+    r++;
+    *r = 0;
+
+    regex_t re;
+
+    // char *expbuf = (char*)malloc(strlen(reg));
+    // regcomp(reg, expbuf);
+
+    int res = regcomp(&re, reg, REG_EXTENDED|REG_NOSUB);
+
+    if(res) {
+        perror("regex compilation error");
+        exit(1);
+    }
+
+    DIR * dir = opendir(".");
+    if (dir == NULL) {
+        perror("opening dict error");
+        exit(1);
+    }
+
+    struct dirent * ent;
+    while ((ent == readdir(dir)) != NULL) {
+        if (regexec(ent->d_name, re) == 0) {
+            currentSimpleCommand->insertArgument(strdrup(ent->d_name));
+        }
+    }
+
+    closedir(dir);
+
+}
+
+void expandWildCard1(char*  arg) {
     if (strchr(arg, *) == NULL &&  strchr(arg, ?) == NULL) {
         currentSimpleCommand->insertArgument(arg);
         return;
@@ -82,7 +180,7 @@ void expandWildCard(char*  arg) {
             r++;
         }
         else {
-            *r = *a
+            *r = *a;
 ;            r++;
         }
 
