@@ -4,8 +4,120 @@
 // #include "GridWorldShell.h"
 
 // int isWildcard = 0;
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include "util.h"
 
-goal: command_list;
+#define PARAM_BUFF_SIZE 64
+#define NAME_BUFF_SIZE 64
+#define NUMOFARGUMENTS 10
+#define NUMOFCOMMANDS 10
+
+int toExit;
+
+typedef struct SimpleCommand{
+  int numberOfAvailableArguments;
+  int numberOfArguments;
+  char ** arguments;
+  // void SimpleCommand();
+  // void insertArgument(char *argument);
+}simpleCommand;
+
+
+// Describes a complete command with the multiple pipes if any
+// and input/output redirection if any.
+
+typedef struct Command{
+  int numberOfAvailableSimpleCommands;
+  int numberOfSimpleCommands;
+  struct SimpleCommand ** simpleCommands;
+  char * outputFile;
+  char * inputFile;
+  char * errFile;
+  //int background;
+}command;
+
+static struct Command *currentCommand;
+static struct SimpleCommand *currentSimpleCommand;
+
+void SimpleCommandInit(){
+  currentSimpleCommand = (simpleCommand*)malloc(sizeof(simpleCommand));
+  currentSimpleCommand->numberOfAvailableArguments=NUMOFARGUMENTS; // Will change when implmenting remalloc()
+  currentSimpleCommand->numberOfArguments = 0;
+  currentSimpleCommand->arguments = malloc(sizeof(char)*PARAM_BUFF_SIZE * NUMOFARGUMENTS);
+  int i;
+  for (i = 0; i < NUMOFARGUMENTS; i++)
+  {
+    currentSimpleCommand->arguments[i] = malloc(sizeof(char) * PARAM_BUFF_SIZE);
+  }
+}
+
+void insertArgument(char* argument){
+  int pos = currentSimpleCommand->numberOfArguments;
+  currentSimpleCommand->arguments[pos] = argument;
+  currentSimpleCommand->numberOfArguments = pos+1;
+}
+
+void CommandInit(){
+  currentCommand = (command*)malloc(sizeof(command));
+  currentCommand->numberOfAvailableSimpleCommands = NUMOFCOMMANDS;
+  currentCommand->numberOfSimpleCommands = 0;
+  currentCommand->simpleCommands = malloc(sizeof(simpleCommand)* NUMOFCOMMANDS);
+  int i;
+  for (i = 0; i < NUMOFCOMMANDS; i++)
+  {
+    currentCommand->simpleCommands[i] = malloc(sizeof(simpleCommand));
+  }
+}
+
+void prompt(){
+  //TODO: make
+}
+
+void execute(){
+  //TODO: make
+}
+
+void print(){
+  //TODO: make
+}
+
+void clear(){
+  free(currentSimpleCommand);
+  free(currentCommand);
+}
+
+void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
+  int posOfCommands = currentCommand->numberOfSimpleCommands;
+  currentCommand->simpleCommands[posOfCommands] = simpleCommand;
+}
+
+void shell_loop(){
+  while(1){
+   SimpleCommandInit();
+   insertArgument("ls");
+   printf("%s\n", currentSimpleCommand->arguments[0]);
+   toExit = 1;  //Tempory Force Break until error handling
+    if(toExit){
+      break;
+    }
+  }
+}
+
+int main(int argc, char **argv){
+    shell_loop();
+  return 0;
+}
+%}
+
+%token <string_val> WORD;
+%token NEWLINE GREAT LESS GREATGREAT GREATAMPERSAND PIPE AMPERSAND GREATGREATAMPERSAND NOTOKEN
+%%
+
+goal:
+    command_list
+    ;
 
 arg_list:
     arg_list WORD
@@ -14,19 +126,19 @@ arg_list:
 
 cmd_and_args:
     WORD arg_list
-        ; 
+        ;
 
 pipe_list:
     pipe_list PIPE cmd_and_args
-    | cmd_and_args 
+    | cmd_and_args
     ;
 
 io_modifier:
-    GREATGREAT Word
-    | GREAT Word
-    | GREATGREATAMPERSAND Word
-    | GREATAMPERSAND Word
-    | LESS Word
+    GREATGREAT WORD
+    | GREAT WORD
+    | GREATGREATAMPERSAND WORD
+    | GREATAMPERSAND WORD
+    | LESS WORD
     ;
 
 io_modifier_list:
@@ -49,7 +161,7 @@ command_line:
         /* error recovery */
 
 command_list :
-    command_list command_line
+    command_line
     ; /* Command loop */
 
 
@@ -60,25 +172,7 @@ int filecomp(const void *f1, const void *f2) {
     return strcmp(first, second);
 }
 
-void expandWildCardsifNecessary(char * arg) {
 
-    int maxEntries = 20;
-    int nEntries = 0;
-
-    char ** array = (char **) malloc (maxEntries * sizeof(char*));
-
-    if (strchr(arg, '*'') == NULL &&  strchr(arg, '?'') == NULL) {
-        currentSimpleCommand->insertArgument(arg);
-    }
-    else {
-        expandWildCard(NULL, arg);
-        qsort(table, 0, sizeof(char*), int (*filecomp)(const void*, const void*));
-        for (int i = 0; i < num; i++) {
-            currentSimpleCommand->insertArgument(table[i]);
-        }
-    }
-
-}
 
 void expandWildCard(char* prefix, char*  suffix) {
     if (strchr(suffix, '*'') == NULL &&  strchr(suffix, '?'') == NULL) {
@@ -150,73 +244,4 @@ void expandWildCard(char* prefix, char*  suffix) {
 
 }
 
-void expandWildCard1(char*  arg) {
-    if (strchr(arg, *) == NULL &&  strchr(arg, ?) == NULL) {
-        currentSimpleCommand->insertArgument(arg);
-        return;
-    }
 
-    char *reg = (char*) malloc (2*strlen(arg)+10);
-    char *a = arg;
-    char *r = reg;
-    *r = '^' //beginning of line
-    r++;
-
-    while (*a) {
-        if (*a == '*') {
-            *r = '.';
-            r++;
-            *r='*';
-            r++;
-'        }
-        else if (*a == '?') {
-            *r = '.';
-            r++;
-        }
-        else if (*a == '.') {
-            *r = '\\';
-            r++;
-            *r = '.';
-            r++;
-        }
-        else {
-            *r = *a;
-;            r++;
-        }
-
-        a++;
-    }
-
-    // 
-    *r = '$';
-    r++;
-    *r = 0;
-
-    regex_t re;
-
-    // char *expbuf = (char*)malloc(strlen(reg));
-    // regcomp(reg, expbuf);
-
-    int res = regcomp(&re, reg, REG_EXTENDED|REG_NOSUB);
-
-    if(res) {
-        perror("regex compilation error");
-        exit(1);
-    }
-
-    DIR * dir = opendir(".");
-    if (dir == NULL) {
-        perror("opening dict error");
-        exit(1);
-    }
-
-    struct dirent * ent;
-    while ((ent == readdir(dir)) != NULL) {
-        if (regexec(ent->d_name, re) == 0) {
-            currentSimpleCommand->insertArgument(strdrup(ent->d_name));
-        }
-    }
-
-    closedir(dir);
-
-}
