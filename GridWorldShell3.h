@@ -16,34 +16,25 @@ Defines command structs
 
 extern int toExit;
 
-typedef struct SimpleCommand{
-    int numberOfAvailableArguments;
-    int numberOfArguments;
-    char ** arguments; 
-//    void SimpleCommand();
-//    void insertArgument(char *argument);
-}simpleCommand;
+// typedef struct SimpleCommand{
+//   int numberOfAvailableArguments;
+//   int numberOfArguments;
+//   char ** arguments;
+//   // void SimpleCommand();
+//   // void insertArgument(char *argument);
+// }simpleCommand;
 
 
-typedef struct Command{
-    int numberOfAvailableSimpleCommands;
-    int numberOfSimpleCommands;
-    char ** commands;
-    struct SimpleCommand ** simpleCommands;
-    char * outputFile;
-    char * inputFile;
-    char * errFile;
-    int background;
-}command;
+// typedef struct Command{
+//   int numberOfAvailableSimpleCommands;
+//   int numberOfSimpleCommands;
+//   char ** commands;
+//   struct SimpleCommand ** simpleCommands;
+//   char * outputFile;
+//   char * inputFile;
+//   char * errFile;
+//   //int background;
 
-static struct Command* currentCommand;
-static struct SimpleCommand* currentSimpleCommand;
-void insertSimpleCommand(struct SimpleCommand* simpleCommand);
-void SimpleCommandInit(void);
-void insertArgument(char* argument);
-void CommandInit(void);
-void execute(void);
-
-
+// }command;
 
 #endif
