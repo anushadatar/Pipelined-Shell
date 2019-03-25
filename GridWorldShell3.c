@@ -128,6 +128,10 @@ void execute(){
       perror(currentSimpleCommand->arguments[0]);
       exit(1);
     }
+    if(!currentCommand->background){
+      waitpid(ret, NULL, 0);
+    }
+
   }
 
 
