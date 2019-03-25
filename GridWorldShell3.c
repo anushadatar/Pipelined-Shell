@@ -12,7 +12,12 @@
 #include <pwd.h>
 #include "GridWorldShell3.h"
 
+#define LSH_RL_BUFSIZE 1024
+#define LSH_TOK_BUFSIZE 64
+#define LSH_TOK_DELIM " \t\r\n\a"
+
 int toExit = 0;
+int numOfCurrentArgs;
 
 typedef struct SimpleCommand{
   int numberOfAvailableArguments;
@@ -80,10 +85,6 @@ void CommandInit(){
 
 }
 
-void prompt(){
-  //TODO: make
-}
-
 void execute(){
 
   int tmpin = dup(0);
@@ -136,8 +137,42 @@ void execute(){
   close(tmpout);
 }
 
-void print(){
-  //TODO: make
+char **split_line(char *line) {
+	int bufsize = LSH_TOK_BUFSIZE, position = 0;
+	char **tokens = malloc(bufsize * sizeof(char*));
+	char *token;
+
+	if (!tokens) {
+		fprintf(stderr, "lsh: allocation error\n");
+		exit(EXIT_FAILURE);
+	}
+
+	token = strtok(line, LSH_TOK_DELIM);
+	while (token != NULL) {
+		tokens[position] = token;
+		position++;
+
+		if (position >= bufsize) {		// increase buffer size just in case
+			bufsize += LSH_TOK_BUFSIZE;
+			tokens = realloc(tokens, bufsize * sizeof(char*));
+			if (!tokens) {
+				fprintf(stderr, "lsh: allocation\n");
+			}
+		}
+
+		token = strtok(NULL, LSH_TOK_DELIM);	// repeats until no token is returned
+	}
+	tokens[position] = NULL;
+  numOfCurrentArgs = position;
+	return tokens;						// array of tokens, ready to execute
+}
+
+
+char *read_line(void) {
+	char *line = NULL;
+	size_t bufsize = 0;
+	getline(&line, &bufsize, stdin);
+	return line;
 }
 
 void clear(){
@@ -191,20 +226,41 @@ void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
   currentCommand->numberOfSimpleCommands = currentCommand->numberOfSimpleCommands + 1;
 }
 
+void recieve_input() {
+	char *line;
+	char **args;
+	int status;
+
+
+	printf("GWS>> ");					// print prompt
+	line = read_line();			// read line
+	args = split_line(line);	// split line into args, an array of strings
+  int i;
+  for(i=0;i<numOfCurrentArgs;i++){
+    insertArgument(args[i]);
+  }
+  if(i==1){
+    insertArgument(NULL);
+  }
+  numOfCurrentArgs = 0;
+	free(line);
+	free(args);
+}
+
+
+
 void shell_loop(){
-
-
   while(1){
    SimpleCommandInit();
-   insertArgument("ls");
-   insertArgument(NULL);
-
+   // insertArgument("ls");
+   // insertArgument(NULL);
    CommandInit();
+   recieve_input();
    insertSimpleCommand(currentSimpleCommand);
-   printf("%s\n", currentSimpleCommand->arguments[0]);
-   printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
+   // printf("%s\n", "Here are the current commands");
+   // printf("%s\n", currentSimpleCommand->arguments[0]);
+   // printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
    execute();
-   toExit = 1;  //Tempory Force Break until error handling
     if(toExit){
       break;
     }
