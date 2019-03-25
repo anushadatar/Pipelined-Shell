@@ -1,0 +1,448 @@
+Terminals unused in grammar
+
+   NOTOKEN
+
+
+State 0 conflicts: 3 shift/reduce
+State 5 conflicts: 3 shift/reduce, 1 reduce/reduce
+State 16 conflicts: 5 shift/reduce
+State 27 conflicts: 5 shift/reduce
+State 35 conflicts: 5 reduce/reduce
+
+
+Grammar
+
+    0 $accept: goal $end
+
+    1 goal: command_list
+
+    2 command_list: command_list command
+    3             | command
+
+    4 command: simple_command
+    5        | %empty
+
+    6 simple_command: pipe_list io_modifier_list background_opt NEWLINE
+    7               | NEWLINE
+    8               | error NEWLINE
+
+    9 command_and_args: command_word arg_list
+
+   10 arg_list: arg_list argument
+   11         | %empty
+
+   12 argument: WORD
+
+   13 command_word: WORD
+
+   14 pipe_list: pipe_list PIPE command_and_args
+   15          | command_and_args
+
+   16 io_modifier: io_modifier_list io_modifier_opt
+   17            | io_modifier_opt
+
+   18 io_modifier_list: io_modifier_list io_modifier
+   19                 | %empty
+
+   20 background_opt: AMPERSAND
+
+   21 io_modifier_opt: GREAT WORD
+   22                | GREATGREAT WORD
+   23                | GREATGREATAMPERSAND WORD
+   24                | GREATAMPERSAND WORD
+   25                | LESS WORD
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 8
+WORD (258) 12 13 21 22 23 24 25
+NEWLINE (259) 6 7 8
+GREAT (260) 21
+LESS (261) 25
+GREATGREAT (262) 22
+GREATAMPERSAND (263) 24
+PIPE (264) 14
+AMPERSAND (265) 20
+GREATGREATAMPERSAND (266) 23
+NOTOKEN (267)
+
+
+Nonterminals, with rules where they appear
+
+$accept (13)
+    on left: 0
+goal (14)
+    on left: 1, on right: 0
+command_list (15)
+    on left: 2 3, on right: 1 2
+command (16)
+    on left: 4 5, on right: 2 3
+simple_command (17)
+    on left: 6 7 8, on right: 4
+command_and_args (18)
+    on left: 9, on right: 14 15
+arg_list (19)
+    on left: 10 11, on right: 9 10
+argument (20)
+    on left: 12, on right: 10
+command_word (21)
+    on left: 13, on right: 9
+pipe_list (22)
+    on left: 14 15, on right: 6 14
+io_modifier (23)
+    on left: 16 17, on right: 18
+io_modifier_list (24)
+    on left: 18 19, on right: 6 16 18
+background_opt (25)
+    on left: 20, on right: 6
+io_modifier_opt (26)
+    on left: 21 22 23 24 25, on right: 16 17
+
+
+State 0
+
+    0 $accept: . goal $end
+
+    error    shift, and go to state 1
+    WORD     shift, and go to state 2
+    NEWLINE  shift, and go to state 3
+
+    $end     reduce using rule 5 (command)
+    error    [reduce using rule 5 (command)]
+    WORD     [reduce using rule 5 (command)]
+    NEWLINE  [reduce using rule 5 (command)]
+
+    goal              go to state 4
+    command_list      go to state 5
+    command           go to state 6
+    simple_command    go to state 7
+    command_and_args  go to state 8
+    command_word      go to state 9
+    pipe_list         go to state 10
+
+
+State 1
+
+    8 simple_command: error . NEWLINE
+
+    NEWLINE  shift, and go to state 11
+
+
+State 2
+
+   13 command_word: WORD .
+
+    $default  reduce using rule 13 (command_word)
+
+
+State 3
+
+    7 simple_command: NEWLINE .
+
+    $default  reduce using rule 7 (simple_command)
+
+
+State 4
+
+    0 $accept: goal . $end
+
+    $end  shift, and go to state 12
+
+
+State 5
+
+    1 goal: command_list .
+    2 command_list: command_list . command
+
+    error    shift, and go to state 1
+    WORD     shift, and go to state 2
+    NEWLINE  shift, and go to state 3
+
+    $end     reduce using rule 1 (goal)
+    $end     [reduce using rule 5 (command)]
+    error    [reduce using rule 5 (command)]
+    WORD     [reduce using rule 5 (command)]
+    NEWLINE  [reduce using rule 5 (command)]
+
+    command           go to state 13
+    simple_command    go to state 7
+    command_and_args  go to state 8
+    command_word      go to state 9
+    pipe_list         go to state 10
+
+
+State 6
+
+    3 command_list: command .
+
+    $default  reduce using rule 3 (command_list)
+
+
+State 7
+
+    4 command: simple_command .
+
+    $default  reduce using rule 4 (command)
+
+
+State 8
+
+   15 pipe_list: command_and_args .
+
+    $default  reduce using rule 15 (pipe_list)
+
+
+State 9
+
+    9 command_and_args: command_word . arg_list
+
+    $default  reduce using rule 11 (arg_list)
+
+    arg_list  go to state 14
+
+
+State 10
+
+    6 simple_command: pipe_list . io_modifier_list background_opt NEWLINE
+   14 pipe_list: pipe_list . PIPE command_and_args
+
+    PIPE  shift, and go to state 15
+
+    $default  reduce using rule 19 (io_modifier_list)
+
+    io_modifier_list  go to state 16
+
+
+State 11
+
+    8 simple_command: error NEWLINE .
+
+    $default  reduce using rule 8 (simple_command)
+
+
+State 12
+
+    0 $accept: goal $end .
+
+    $default  accept
+
+
+State 13
+
+    2 command_list: command_list command .
+
+    $default  reduce using rule 2 (command_list)
+
+
+State 14
+
+    9 command_and_args: command_word arg_list .
+   10 arg_list: arg_list . argument
+
+    WORD  shift, and go to state 17
+
+    $default  reduce using rule 9 (command_and_args)
+
+    argument  go to state 18
+
+
+State 15
+
+   14 pipe_list: pipe_list PIPE . command_and_args
+
+    WORD  shift, and go to state 2
+
+    command_and_args  go to state 19
+    command_word      go to state 9
+
+
+State 16
+
+    6 simple_command: pipe_list io_modifier_list . background_opt NEWLINE
+   18 io_modifier_list: io_modifier_list . io_modifier
+
+    GREAT                shift, and go to state 20
+    LESS                 shift, and go to state 21
+    GREATGREAT           shift, and go to state 22
+    GREATAMPERSAND       shift, and go to state 23
+    AMPERSAND            shift, and go to state 24
+    GREATGREATAMPERSAND  shift, and go to state 25
+
+    GREAT                [reduce using rule 19 (io_modifier_list)]
+    LESS                 [reduce using rule 19 (io_modifier_list)]
+    GREATGREAT           [reduce using rule 19 (io_modifier_list)]
+    GREATAMPERSAND       [reduce using rule 19 (io_modifier_list)]
+    GREATGREATAMPERSAND  [reduce using rule 19 (io_modifier_list)]
+
+    io_modifier       go to state 26
+    io_modifier_list  go to state 27
+    background_opt    go to state 28
+    io_modifier_opt   go to state 29
+
+
+State 17
+
+   12 argument: WORD .
+
+    $default  reduce using rule 12 (argument)
+
+
+State 18
+
+   10 arg_list: arg_list argument .
+
+    $default  reduce using rule 10 (arg_list)
+
+
+State 19
+
+   14 pipe_list: pipe_list PIPE command_and_args .
+
+    $default  reduce using rule 14 (pipe_list)
+
+
+State 20
+
+   21 io_modifier_opt: GREAT . WORD
+
+    WORD  shift, and go to state 30
+
+
+State 21
+
+   25 io_modifier_opt: LESS . WORD
+
+    WORD  shift, and go to state 31
+
+
+State 22
+
+   22 io_modifier_opt: GREATGREAT . WORD
+
+    WORD  shift, and go to state 32
+
+
+State 23
+
+   24 io_modifier_opt: GREATAMPERSAND . WORD
+
+    WORD  shift, and go to state 33
+
+
+State 24
+
+   20 background_opt: AMPERSAND .
+
+    $default  reduce using rule 20 (background_opt)
+
+
+State 25
+
+   23 io_modifier_opt: GREATGREATAMPERSAND . WORD
+
+    WORD  shift, and go to state 34
+
+
+State 26
+
+   18 io_modifier_list: io_modifier_list io_modifier .
+
+    $default  reduce using rule 18 (io_modifier_list)
+
+
+State 27
+
+   16 io_modifier: io_modifier_list . io_modifier_opt
+   18 io_modifier_list: io_modifier_list . io_modifier
+
+    GREAT                shift, and go to state 20
+    LESS                 shift, and go to state 21
+    GREATGREAT           shift, and go to state 22
+    GREATAMPERSAND       shift, and go to state 23
+    GREATGREATAMPERSAND  shift, and go to state 25
+
+    GREAT                [reduce using rule 19 (io_modifier_list)]
+    LESS                 [reduce using rule 19 (io_modifier_list)]
+    GREATGREAT           [reduce using rule 19 (io_modifier_list)]
+    GREATAMPERSAND       [reduce using rule 19 (io_modifier_list)]
+    GREATGREATAMPERSAND  [reduce using rule 19 (io_modifier_list)]
+
+    io_modifier       go to state 26
+    io_modifier_list  go to state 27
+    io_modifier_opt   go to state 35
+
+
+State 28
+
+    6 simple_command: pipe_list io_modifier_list background_opt . NEWLINE
+
+    NEWLINE  shift, and go to state 36
+
+
+State 29
+
+   17 io_modifier: io_modifier_opt .
+
+    $default  reduce using rule 17 (io_modifier)
+
+
+State 30
+
+   21 io_modifier_opt: GREAT WORD .
+
+    $default  reduce using rule 21 (io_modifier_opt)
+
+
+State 31
+
+   25 io_modifier_opt: LESS WORD .
+
+    $default  reduce using rule 25 (io_modifier_opt)
+
+
+State 32
+
+   22 io_modifier_opt: GREATGREAT WORD .
+
+    $default  reduce using rule 22 (io_modifier_opt)
+
+
+State 33
+
+   24 io_modifier_opt: GREATAMPERSAND WORD .
+
+    $default  reduce using rule 24 (io_modifier_opt)
+
+
+State 34
+
+   23 io_modifier_opt: GREATGREATAMPERSAND WORD .
+
+    $default  reduce using rule 23 (io_modifier_opt)
+
+
+State 35
+
+   16 io_modifier: io_modifier_list io_modifier_opt .
+   17            | io_modifier_opt .
+
+    GREAT                reduce using rule 16 (io_modifier)
+    GREAT                [reduce using rule 17 (io_modifier)]
+    LESS                 reduce using rule 16 (io_modifier)
+    LESS                 [reduce using rule 17 (io_modifier)]
+    GREATGREAT           reduce using rule 16 (io_modifier)
+    GREATGREAT           [reduce using rule 17 (io_modifier)]
+    GREATAMPERSAND       reduce using rule 16 (io_modifier)
+    GREATAMPERSAND       [reduce using rule 17 (io_modifier)]
+    GREATGREATAMPERSAND  reduce using rule 16 (io_modifier)
+    GREATGREATAMPERSAND  [reduce using rule 17 (io_modifier)]
+    $default             reduce using rule 16 (io_modifier)
+
+
+State 36
+
+    6 simple_command: pipe_list io_modifier_list background_opt NEWLINE .
+
+    $default  reduce using rule 6 (simple_command)
