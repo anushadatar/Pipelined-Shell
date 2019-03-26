@@ -19,6 +19,7 @@
 // forward declarations for built in shell commands
 void lsh_cd(char **args);
 void lsh_mkdir(char **args);
+void print(int t);
 
 // build in commands - array
 char *builtin_str[] = {
@@ -42,6 +43,7 @@ void lsh_cd(char **args) {
   else if (chdir(args[1]) != 0) {
     perror("lsh");
   }
+  printf("here %s\n", args[1]);
 }
 
 void lsh_mkdir(char **args) {
@@ -95,6 +97,7 @@ void SimpleCommandInit(){
   {
     currentSimpleCommand->arguments[i] = malloc(sizeof(char) * PARAM_BUFF_SIZE);
   }
+  // print(0);
 }
 
 void insertArgument(char* argument){
@@ -106,6 +109,7 @@ void insertArgument(char* argument){
   int pos = currentSimpleCommand->numberOfArguments;
   currentSimpleCommand->arguments[pos] = argument;
   currentSimpleCommand->numberOfArguments = pos+1;
+  // print(0);
 }
 
 
@@ -123,6 +127,13 @@ void CommandInit(){
 }
 
 void execute(){
+
+  for (int i = 0; i < lsh_num_builtins(); i++) {
+    if (strcmp(currentSimpleCommand->arguments[0], builtin_str[i]) == 0) {
+      (*builtin_funct[i])(currentCommand->simpleCommands[0]->arguments);
+      return;
+    }
+  }
 
   int tmpin = dup(0);
   int tmpout = dup(1);
@@ -178,6 +189,7 @@ void execute(){
   close(tmpout);
 }
 
+
 char **split_line(char *line) {
 	int bufsize = LSH_TOK_BUFSIZE, position = 0;
 	char **tokens = malloc(bufsize * sizeof(char*));
@@ -214,6 +226,28 @@ char *read_line(void) {
 	size_t bufsize = 0;
 	getline(&line, &bufsize, stdin);
 	return line;
+}
+
+void print(int t) {
+  if (t == 0) {
+    printf("\nSimple Command Table:\n");
+
+    for (int i = 0; i < currentSimpleCommand->numberOfArguments; i++) {
+      printf("%s\t", currentSimpleCommand->arguments[i]);
+    }
+
+    printf("\n");
+  }
+  else {
+    printf("\nCommand Table:\n");
+
+    for (int i = 0; i < currentCommand->numberOfSimpleCommands; i++) {
+      for (int j = 0; j < currentCommand->simpleCommands[i]->numberOfArguments; j++) {
+        printf("%s\t", currentCommand->simpleCommands[i]->arguments[j]);
+      }
+      printf("\n");
+    }
+  }
 }
 
 void clear(){
@@ -265,17 +299,23 @@ void insertSimpleCommand( struct SimpleCommand * simpleCommand ){
   int posOfCommands = currentCommand->numberOfSimpleCommands;
   currentCommand->simpleCommands[posOfCommands] = simpleCommand;
   currentCommand->numberOfSimpleCommands = currentCommand->numberOfSimpleCommands + 1;
+  
 }
 
 void recieve_input() {
+
 	char *line;
 	char **args;
 	int status;
 
+  
 
-	printf("GWS>> ");					// print prompt
+
+	// printf("GWS>> ");					// print prompt
 	line = read_line();			// read line
+  // char * linecpy = strdup(line);
 	args = split_line(line);	// split line into args, an array of strings
+
   int i;
   for(i=0;i<numOfCurrentArgs;i++){
     insertArgument(args[i]);
@@ -283,9 +323,10 @@ void recieve_input() {
   if(i==1){
     insertArgument(NULL);
   }
+
   numOfCurrentArgs = 0;
-	free(line);
-	free(args);
+	// free(line);
+	// free(args);
 }
 
 
@@ -294,19 +335,9 @@ void shell_loop(){
   while(1){
    SimpleCommandInit();
    CommandInit();
-   // recieve_input();
-   // insertSimpleCommand(currentSimpleCommand);
+   recieve_input();
+   insertSimpleCommand(currentSimpleCommand);
 
-   // here for now for testing purposes
-  //  for (int i = 0; i < lsh_num_builtins(); i++) {
-  //   if (strcmp(currentSimpleCommand->arguments[1], builtin_str[i]) == 0) {
-  //     (*builtin_funct[i])(currentSimpleCommand->arguments[1]);
-  //   }
-  // }
-
-   char *test[2] = {"mkdir", "test"};
-
-  lsh_mkdir(test);
    // printf("%c\n", currentSimpleCommand->arguments[0]);
    // printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
    toExit = 1;  //Tempory Force Break until error handling
