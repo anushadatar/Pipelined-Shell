@@ -1,5 +1,5 @@
-/* Template for one potential easter egg - a lisp interpreter.
-	Toggled by "lisp"
+/* Easter Egg! Rudimentary lisp interpreter.
+*  Performs add, subtract, multiplication, and division operations.
 */
 
 #include <stdio.h>
@@ -13,6 +13,10 @@
 #define MUL '*'
 #define DIV '/'
 
+/* Function to add a series of numbers together.
+*  input: string input of format "+ {num} {num} ..."
+*  output: result of the operation
+*/
 int opadd(char* input) {
 	int result = 0;
 
@@ -30,6 +34,10 @@ int opadd(char* input) {
 	return result;
 }
 
+/* Function to subtract two numbers.
+*  input: string input of format "- {num} {num}"
+*  output: result of the operation
+*/
 int opsub(char* input) {
 	int i = 0;
 	int j = 0;
@@ -46,6 +54,10 @@ int opsub(char* input) {
 
 }
 
+/* Function to multiply a series of numbers together.
+*  input: string input of format "* {num} {num} ..."
+*  output: result of the operation
+*/
 int opprod(char* input) {
 	int result = 1;
 
@@ -63,6 +75,10 @@ int opprod(char* input) {
 	return result;
 }
 
+/* Function to divide two numbers.
+*  input: string input of format "/ {num} {num}"
+*  output: result of the operation
+*/
 int opdiv(char *input) {
 	int i = 0;
 	int j = 0;
@@ -79,6 +95,11 @@ int opdiv(char *input) {
 
 }
 
+/* Function to evaluate the input, choose the correct operation,
+*    and returns the result.
+*  input: string input of format "{op} {num} ..."
+*  output: returns result of the operation
+*/
 int evaluate(char* input) {
 
 
@@ -106,6 +127,8 @@ int evaluate(char* input) {
 	return result;
 }
 
+/* Takes an input of a string and a length and gets input/
+*/ 
 void readlisp(char* string, int length)
 {
     int x;
@@ -120,27 +143,3 @@ void readlisp(char* string, int length)
         }
     }
 }
-
-// int main() {
-// 	char* input = malloc(1024);
-// 	printf("Enter command.\n");
-
-// 	while(1) {
-// 		fgets(input, sizeof(input), stdin);
-
-// 		if (strcmp(input, "lisp\n") == 0) {
-
-// 			while(1) {
-// 				free(input);
-// 				input = malloc(1024);
-// 				readlisp(input, 1024);
-// 				printf("-> %d\n", evaluate(input));
-// 			}
-// 		}
-// 		else {
-// 			break;
-// 		}	
-// 	}
-
-// 	return 0;
-// }
