@@ -12,6 +12,7 @@
 #include <pwd.h>
 #include "GridWorldShell3.h"
 #include "eggs/eggs.h"
+// #include "eggs/quark.h"
 
 #define LSH_RL_BUFSIZE 1024
 #define LSH_TOK_BUFSIZE 64
@@ -25,6 +26,7 @@ void print(int t);
 void teachme(char ** input);
 void printegg(char** input);
 void lisp(char** input);
+void notvim(char** input);
 
 
 // build in commands - array
@@ -36,6 +38,7 @@ char *builtin_str[] = {
   "grid",
   "title",
   "critter"
+  // "vim"
 };
 
 void (*builtin_funct[]) (char **) = {
@@ -46,6 +49,7 @@ void (*builtin_funct[]) (char **) = {
   &printegg,
   &printegg,
   &printegg
+  // &notvim
 };
 
 void printegg(char** input){
@@ -80,6 +84,21 @@ void lisp(char **input) {
   printf("-> %d\n", evaluate(in));
 }
 
+// void notvim(char** input) {
+//   char * in = malloc(1024);
+//   readlisp(in, 1024);
+
+//   initialize();
+//   determineHighlight(in);
+//   openFile(in);
+//   enterRawMode(STDIN_FILENO);
+//   setStatus("Ctrl + | S = save | Q = quit");
+//   /* Keep processing until method completes. */
+//   while(1) {
+//       editorRefreshScreen();
+//       editorKeyProcess(STDIN_FILENO);
+//   }
+// }
 
 
 int lsh_num_builtins() {
