@@ -11,6 +11,7 @@
 // #include <regexpr.h>
 #include <pwd.h>
 #include "GridWorldShell3.h"
+#include "eggs/eggs.h"
 
 #define LSH_RL_BUFSIZE 1024
 #define LSH_TOK_BUFSIZE 64
@@ -20,17 +21,66 @@
 void lsh_cd(char **args);
 void lsh_mkdir(char **args);
 void print(int t);
+// void readlisp(char* string, int length);
+void teachme(char ** input);
+void printegg(char** input);
+void lisp(char** input);
+
 
 // build in commands - array
 char *builtin_str[] = {
   "cd",
-  "mkdir"
+  "mkdir",
+  "lisp",
+  "teach",
+  "grid",
+  "title",
+  "critter"
 };
 
 void (*builtin_funct[]) (char **) = {
   &lsh_cd,
-  &lsh_mkdir
+  &lsh_mkdir,
+  &lisp,
+  &teachme,
+  &printegg,
+  &printegg,
+  &printegg
 };
+
+void printegg(char** input){
+  if(!strcmp(input[0],"grid")){
+    printGrid();
+  }else if(!strcmp(input[0],"title")){
+    printTitle();
+  } else if(!strcmp(input[0], "critter")){
+    printCritter();
+  }
+}
+
+void teachme(char **input) {
+ // char *input = malloc(2048);
+ char *url = malloc(60 + sizeof(char) * strlen("xdg-open "));
+
+ // readin(input, 2048);
+
+ // if (strcmp(input[0], "teach me") == 0) {
+   // free(input);
+   // input = malloc(2048);
+   readin(input[0], 2048);
+   strcpy(url, "xdg-open ");
+   choose(input[0], url);
+   system(url);
+ // }
+}
+
+void lisp(char **input) {
+  char * in = malloc(1024);
+  readlisp(in, 1024);
+  printf("-> %d\n", evaluate(in));
+}
+
+
 
 int lsh_num_builtins() {
   return sizeof(builtin_str) / sizeof(char *);
@@ -350,5 +400,7 @@ void shell_loop(){
 
 int main(int argc, char **argv){
   shell_loop();
+  // printCritter();
+
   return 0;
 }

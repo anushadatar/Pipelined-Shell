@@ -70,20 +70,21 @@ void printCritter(){
   printf("--------------------------------------\n");
 }
 
-void print( char *input){
-  if(!strcmp(input,"grid")){
-    printGrid();
-  }else if(!strcmp(input,"title")){
-    printTitle();
-  }else if(!strcmp(input, "critter")){
-    printCritter();
-  }
-}
+// void printegg(char* input){
+//   if(!strcmp(input,"grid")){
+//     printGrid();
+//   }else if(!strcmp(input,"title")){
+//     printTitle();
+//   }else 
+//   if(!strcmp(input, "critter")){
+//     printCritter();
+//   }
+// }
 
 
-//
-int main(){
-  char *inputExample= "critter";
-  print(inputExample);
-  return 0;
-}
+// //
+// int main(){
+//   char *inputExample= "critter";
+//   print(inputExample);
+//   return 0;
+// }

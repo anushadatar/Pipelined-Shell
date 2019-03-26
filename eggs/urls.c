@@ -1,22 +1,24 @@
 /* Template for the Think easter eggs. Opens the URL of varied Allen books.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
 
-#define THINKOS "http://greenteapress.com/thinkos/thinkos.pdf"
-#define THINKPERL "http://greenteapress.com/wp/think-perl-6/"
-#define THINKSTATS "http://greenteapress.com/thinkstats2/thinkstats2.pdf"
-#define THINKBAYES "http://www.greenteapress.com/thinkbayes/thinkbayes.pdf"
-#define THINKDSP "http://greenteapress.com/thinkdsp/thinkdsp.pdf"
-#define THINKJAVA "http://greenteapress.com/thinkjava6/thinkjava.pdf"
-#define THINKDS "http://greenteapress.com/thinkdast/thinkdast.pdf"
-#define THINKCOM "http://greenteapress.com/complexity2/thinkcomplexity2.pdf"
-#define THINKPY "http://greenteapress.com/thinkpython2/thinkpython2.pdf"
-#define ALLEN "http://www.allendowney.com/wp/"
+#include "eggs.h"
 
-void read(char* string, int length)
+// #define THINKOS "http://greenteapress.com/thinkos/thinkos.pdf"
+// #define THINKPERL "http://greenteapress.com/wp/think-perl-6/"
+// #define THINKSTATS "http://greenteapress.com/thinkstats2/thinkstats2.pdf"
+// #define THINKBAYES "http://www.greenteapress.com/thinkbayes/thinkbayes.pdf"
+// #define THINKDSP "http://greenteapress.com/thinkdsp/thinkdsp.pdf"
+// #define THINKJAVA "http://greenteapress.com/thinkjava6/thinkjava.pdf"
+// #define THINKDS "http://greenteapress.com/thinkdast/thinkdast.pdf"
+// #define THINKCOM "http://greenteapress.com/complexity2/thinkcomplexity2.pdf"
+// #define THINKPY "http://greenteapress.com/thinkpython2/thinkpython2.pdf"
+// #define ALLEN "http://www.allendowney.com/wp/"
+
+void readin(char* string, int length)
 {
     int x;
 
@@ -31,7 +33,7 @@ void read(char* string, int length)
     }
 }
 
-void choose (char *input, char *url) {
+void choose(char *input, char *url) {
 	if (strstr(input, "operating systems") || strstr(input, "os")) {
 		strcat(url, THINKOS);
 	}
@@ -64,22 +66,22 @@ void choose (char *input, char *url) {
 	}
 }
 
-int main() {
-	char *input = malloc(2048);
-	char *url = malloc(60 + sizeof(char) * strlen("xdg-open "));
+// int main() {
+// 	char *input = malloc(2048);
+// 	char *url = malloc(60 + sizeof(char) * strlen("xdg-open "));
 
-	read(input, 2048);
+// 	readin(input, 2048);
 
-	if (strcmp(input, "teach me") == 0) {
-		free(input);
-		input = malloc(2048);
-		read(input, 2048);
-		strcpy(url, "xdg-open ");
-		choose(input, url);
-		system(url);
-	}
+// 	if (strcmp(input, "teach me") == 0) {
+// 		free(input);
+// 		input = malloc(2048);
+// 		readin(input, 2048);
+// 		strcpy(url, "xdg-open ");
+// 		choose(input, url);
+// 		system(url);
+// 	}
 
-	// printf("%s\n", url);
-	return 0;
+// 	// printf("%s\n", url);
+// 	return 0;
 
-}
+// }
