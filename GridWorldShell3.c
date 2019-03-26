@@ -128,6 +128,13 @@ void CommandInit(){
 
 void execute(){
 
+  for (int i = 0; i < lsh_num_builtins(); i++) {
+    if (strcmp(currentSimpleCommand->arguments[0], builtin_str[i]) == 0) {
+      (*builtin_funct[i])(currentCommand->simpleCommands[0]->arguments);
+      return;
+    }
+  }
+
   int tmpin = dup(0);
   int tmpout = dup(1);
 
@@ -311,22 +318,11 @@ void recieve_input() {
 
   int i;
   for(i=0;i<numOfCurrentArgs;i++){
-    insertArgument(line);
+    insertArgument(args[i]);
   }
   if(i==1){
     insertArgument(NULL);
   }
-
-
-  // insertSimpleCommand(currentSimpleCommand);
-
-  // for (int i = 0; i < lsh_num_builtins(); i++) {
-  //   if (strcmp(currentSimpleCommand->arguments[0], builtin_str[i]) == 0) {
-  //     (*builtin_funct[i])(currentCommand->simpleCommands[0]->arguments);
-  //   }
-  // }
-
-
 
   numOfCurrentArgs = 0;
 	// free(line);
@@ -339,61 +335,13 @@ void shell_loop(){
   while(1){
    SimpleCommandInit();
    CommandInit();
-   // recieve_input();
-   // insertSimpleCommand(currentSimpleCommand);
-
-  
-   char *line;
-   char **lines;
-   line = read_line();
-   lines = split_line(line);
-
-   int i;
-
-   for(i=0;i<4;i++){
-    insertArgument(lines[i]);
-  }
-  if(i==1){
-    insertArgument(NULL);
-  }
-
-
-  insertSimpleCommand(currentSimpleCommand);
-
-
-
-
-   // here for now for testing purposes
-   for (int i = 0; i < lsh_num_builtins(); i++) {
-    if (strcmp(currentSimpleCommand->arguments[0], builtin_str[i]) == 0) {
-      (*builtin_funct[i])(currentCommand->simpleCommands[0]->arguments);
-    }
-  }
-
-
-  //  char *test[2] = {"cd", "critters"};
-
-  // lsh_cd(test);
-
-  // char *test1[2] = {"ls", NULL};
-
-  // int i;
-
-  //  for(i=0;i<2;i++){
-  //   insertArgument(test1[i]);
-  // }
-  // if(i==1){
-  //   insertArgument(NULL);
-  // }
-
-
-  // insertSimpleCommand(currentSimpleCommand);
-
+   recieve_input();
+   insertSimpleCommand(currentSimpleCommand);
 
    // printf("%c\n", currentSimpleCommand->arguments[0]);
    // printf("%s\n", currentCommand->simpleCommands[0]->arguments[1]);
    toExit = 1;  //Tempory Force Break until error handling
-   // execute();
+   execute();
     if(toExit){
       break;
     }
