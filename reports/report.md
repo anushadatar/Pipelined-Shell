@@ -53,14 +53,14 @@ Our shell has three major pieces: the parser that collects the user input, the i
 
 ### Parsing: 
 As mention, one of our biggest design decisions was around how robust our parsing function could be. In the end we used a simple parsing function inspired by Stephen Brennan’s Simple Shell tutorial. We first read the line from the user using C’s getline function:
-`
+```
 char *read_line(void) {
 	char *line = NULL;
 	size_t bufsize = 0;
 	getline(&line, &bufsize, stdin);
 	return line;
 }
-`
+```
 Then we split the user’s input line by predetermined delimiters of a space or tab into tokens (words). Here we use C’s strtok function to break up the lines.
 token = strtok(line, LSH_TOK_DELIM);
 We then add each token to the simpleCommand data structure that will be used by the execute function. A command data structure is then used to hold the simpleCommand as well as passed file names for piping or redirecting if a user included these in the command call.
@@ -69,15 +69,15 @@ We then add each token to the simpleCommand data structure that will be used by 
 
 One useful organization plan we found useful was from the Purdue CS252 shell lab assignment. In this configuration, the parse makes an instance of a simple command for every command it encounters in a user input line. Then, it stores all of the simple commands in an overall command structure that holds smaller simple commands within it. The execution function can break the current overall command into simple commands and parse each one.
 This is the simple command struct. It holds arguments to a single command.
-`
+```
 typedef struct SimpleCommand{
   int numberOfAvailableArguments;
   int numberOfArguments;
   char ** arguments;
 }simpleCommand;
-`
+```
 The overall command struct holds simple commands and holds file names for piping and other file functions. 
-`
+```
 typedef struct Command{
   int numberOfAvailableSimpleCommands;
   int numberOfSimpleCommands;
@@ -88,7 +88,7 @@ typedef struct Command{
   char * errFile;
   int background;
 }command;
-`
+```
 ### Execution: 
 The actual line of execution is fairly simple as it makes use of C’s in-built command. The next few lines of code show a basic fork of the current process and an execution call for the saved command:
   ret = fork();
@@ -100,7 +100,7 @@ The actual line of execution is fairly simple as it makes use of C’s in-built 
 Our execution function runs through all the saved commands and executes them.
 There are two types of execution, ones that carry on the same process (like ls) and ones that fork into a different process (like cd). The ones that carry on the same process can easily be taken care of by the execvp function. However, we had to code functions and figure out the logic for if a user input one of commands that fork into a new process.
 For example, if a user commands to make a new directory using the mkdir command, our execution function would call our mkdir function:
-`
+```
 void lsh_mkdir(char **args) {
   if (args[1] == NULL) {
     fprintf(stderr, "lsh: expected argument \"mkdir\"\n");
@@ -109,7 +109,7 @@ void lsh_mkdir(char **args) {
     perror("lsh");
   }
 }
-`
+```
 We used the built-in command framework to also implement our Easter Eggs. Much like the normal built-in commands, the Easter Eggs are toggled by an input (and also obviously would not be something built into the execvp function), and so we edited the existing framework in order to add the key words.
 While the bulk of the execution function is simple, it also handled piping and error handling. 
 
