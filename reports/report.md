@@ -122,19 +122,34 @@ Though a large part of the project did involve massive amounts of debugging or f
 
 # Resources
 Throughout the course of this project, we found the following resources useful:
-Unix Shell Implementation:
+
+#### Unix Shell Implementation:
+
 Purdue’s “Write Your Own Shell” Lab Assignment from their CS252 Class: https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
+
 Stephen Brennan’s Simple Shell Outline and Tutorial:  https://brennan.io/2015/01/16/write-a-shell-in-c/
-Lex and Yacc:
+
+#### Lex and Yacc:
+
 Georgetown University’s explanation of Lex and Yacc: http://people.cs.georgetown.edu/~clay/classes/spring2017/os/shell1.html 
+
 The Official Lex and Yacc page: http://dinosaur.compilertools.net 
+
 Writing an interpreter with Lex, Yacc, and Memphis: http://memphis.compilertools.net/interpreter.html 
+
 The compact guide to Lex and Yacc: https://www.epaperpress.com/lexandyacc/download/LexAndYacc.pdf 
-Piping and Redirection:
+
+#### Piping and Redirection:
+
 Implementation of redirection and pipe operators in shell: http://www.sarathlakshman.com/2012/09/24/implementation-overview-of-redirection-and-pipe-operators-in-shell 
+
 Creating Pipes in C: https://www.tldp.org/LDP/lpg/node11.html 
-Globbing / Wildcards:
+
+#### Globbing / Wildcards:
+
 Glob Matching Can Be Simple And Fast Too: https://research.swtch.com/glob 
+
 GNU/Linux Command-Line Wildcards Summary: http://tldp.org/LDP/GNU-Linux-Tools-Summary/html/x11655.htm 
+
 Text Editor:
 Kilo text editor guide: https://viewsourcecode.org/snaptoken/kilo/index.html
