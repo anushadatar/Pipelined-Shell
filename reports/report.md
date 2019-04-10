@@ -26,8 +26,11 @@ We implemented the ability to pipe and redirect output. For piping, we first had
 Globbing is the ability to expand a non-specific file name (a wildcard pattern) into all the associated existing file names that exist on that computer, network, server, etc. 
 There are several standard wildcards used by most commands, but ours implemented three of them:
 ? (question mark): This represents any single character. For instance, “a?” could expand into “aa”, “ab”, “ac”, “a0”, “a1”, “a2”, etc.
-* (asterisk): This represents any number of any characters. For instance, “ab*” could expand into “ab”, “aba”, “abc”, “abac”, “abdac”, etc. Essentially, just anything that starts with the letters “ab”. The example “a*b” could expand into “ab”, “acb”, “aab”, “adacb”, etc. Essentially, just anything that starts with the letter “a” and ends with the letter “b”.
-. (period): This does the same thing as the question mark.
+
+* `*` (asterisk): This represents any number of any characters. For instance, “ab*” could expand into “ab”, “aba”, “abc”, “abac”, “abdac”, etc. Essentially, just anything that starts with the letters “ab”. The example “a*b” could expand into “ab”, “acb”, “aab”, “adacb”, etc. Essentially, just anything that starts with the letter “a” and ends with the letter “b”.
+
+* `.` (period): This does the same thing as the question mark.
+
 The wildcard characters are first converted into regex expressions. Each expression begins with a ‘^’ and ends with a ‘$’. The entire path is initially just passed into the function that takes in two parameters, prefix and suffix, as the suffix variables. As the path and wildcards get expanded, the prefix will represent the expanded path (and should hold no wildcard characters), while the suffix will be the path of the path yet to be expanded. The function is set up recursively to allow for this behavior.
 
 Some commands will list out directories in a sorted order, and so the globbing functionality also has the ability to sort paths as well.
